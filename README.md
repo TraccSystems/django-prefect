@@ -1,9 +1,14 @@
 # django-prefect document
 
-1. start the prefect local server  on
+1. start the prefect local server
     local server: type prefect server start,
    or login prefect cloud :type  prefect cloud login
-2. list of worker pool to start and befor run flow locally
+   
+   # create new worker process pool
+   type  prefect work-pool create --type process my-process-pool
+
+   # create new deployment
+3. list of worker pool to start and before run flow locally or with prefect cloud
     # article-process-pool 
      type : Process
     # my-process-pool
@@ -12,6 +17,21 @@
       type:Process
    # To start pool
       type prefect worker start --pool article-process-pool
+   
+   # create new worker process
+   type  prefect work-pool create --type process my-process-pool
+
+   # create new deployment
+   cd flowapp
+   list of flow name to
+   1. pull_data_from_s3_write_to_postgress
+   2. write_data_to_postgress
+   3. download_file_from_s3_upload_to_postgres
+  
+   type prefect deploy flow.py:download_file_from_s3_upload_to_postgres -n my-deployment -p userflow-process-pool 
+   
+   
+
 
    # custome block
    custom block are located at digital_ocean_block.py
