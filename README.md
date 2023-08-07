@@ -19,3 +19,6 @@
    #flow function
    located at flow.py
 
+   # Note
+   run the same process with the article_flow repo
+
