@@ -1,25 +1,27 @@
 # django-prefect document
 
-1. start the prefect local server
-    local server: type prefect server start,
+1. start the prefect local server : type prefect server start,
    or login prefect cloud :type  prefect cloud login
    
    # create new worker process pool
    type  prefect work-pool create --type process my-process-pool
 
    # create new deployment
-3. list of worker pool to start and before run flow locally or with prefect cloud
+3. list of avaliable worker pool to start and before run flow locally or with prefect cloud
     # article-process-pool 
      type : Process
     # my-process-pool
      type:Process
     # userflow-process-pool 
       type:Process
-   # To start pool
+   
+   # create new worker pool
+   type  prefect work-pool create --type process my-process-pool
+   
+   # To start new worker  pool
       type prefect worker start --pool article-process-pool
    
-   # create new worker process
-   type  prefect work-pool create --type process my-process-pool
+ 
 
    # create new deployment
    cd  into flowapp
