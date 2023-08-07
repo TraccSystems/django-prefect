@@ -22,8 +22,9 @@
    type  prefect work-pool create --type process my-process-pool
 
    # create new deployment
-   cd flowapp
-   list of flow name to
+   cd  into flowapp
+   
+    # list of flow name to
    1. pull_data_from_s3_write_to_postgress
    2. write_data_to_postgress
    3. download_file_from_s3_upload_to_postgres
