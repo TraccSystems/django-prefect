@@ -24,10 +24,11 @@
    # create new deployment
    cd  into flowapp
    
-    # list of flow name to
+    # list of flow name to add to existing work pool
    1. pull_data_from_s3_write_to_postgress
    2. write_data_to_postgress
    3. download_file_from_s3_upload_to_postgres
+      all flow are in flow.py
   
    type prefect deploy flow.py:download_file_from_s3_upload_to_postgres -n my-deployment -p userflow-process-pool 
    
