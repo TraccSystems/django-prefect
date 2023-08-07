@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{request.user.email}}</title>
+</head>
+<link rel="stylesheet" href="{% static 'flowapp/main.css' %}">
+<script src=" {% static 'flowapp/selectsource.js' %}" defer ></script>
+<body>
+<div class="menu-header"></div>
+
+<div class="wrapper-container">
+    <div class="navbar"></div>
+
+
+    <div class="flow-container">
+        <div class="select-container">
+        <select name="source" class="source">
+            <option value="Select">Select</option>
+            <option value="AWS">AWS</option>
+            <option value="postgress">Progress</option>
+        </select>
+
+        <div class="s3Source">
+            <form action="{% url 'flow-edit' flow.flow_name%}" method="post">
+                {% csrf_token %}
+                {{ s3Form.non_field_errors }}
+                {% for field in s3Form %}
+               
+                {{ field.label_tag }} <br/>
+                {{ field }}
+                <br/>
+                {{ field.errors }}
+                {% if field.help_text %}
+                <p class="help">{{ field.help_text|safe }}</p>
+                {% endif %}
+    
+                {% endfor %}
+                <input type="submit" value="Create">
+            </form>
+        
+        </div>
+
+        <div class="postgress">
+            <form action="{% url 'flow-edit' flow.flow_name%}" method="post">
+                {% csrf_token %}
+                {{ postgresfrom.non_field_errors }}
+                {% for field in postgresfrom %}
+               
+                {{ field.label_tag }} <br/>
+                {{ field }}
+                <br/>
+                {{ field.errors }}
+                {% if field.help_text %}
+                <p class="help">{{ field.help_text|safe }}</p>
+                {% endif %}
+    
+                {% endfor %}
+                <input type="submit" value="Create">
+            </form>
+        
+        </div>
+    </div>
+       
+
+    </div>
+
+
+</div>
+    
+</body>
+</html>

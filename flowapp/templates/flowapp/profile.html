@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{request.user.email}}</title>
+</head>
+<link rel="stylesheet" href="{% static 'flowapp/main.css' %}">
+<script src="{% static 'flowapp/main.js' %}" defer></script>
+<body>
+<div class="menu-header"></div>
+
+<div class="wrapper-container">
+    <div class="flow-form">
+        <form action="{% url 'profile' %}" method="post">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            {% for field in form %}
+           
+            {{ field.label_tag }} <br/>
+            {{ field }}
+            <br/>
+            {{ field.errors }}
+            {% if field.help_text %}
+            <p class="help">{{ field.help_text|safe }}</p>
+            {% endif %}
+
+            {% endfor %}
+
+            <input type="submit" value="create">
+        </form>
+    </div>
+    <div class="navbar"></div>
+
+
+    <div class="flow-container">
+        <div class="create-flow-btn">
+            <button class="flowbtn">Create Flow</button>
+        </div>
+
+        <div class="flow-table">
+            <table>
+                <tr>
+                    <th>Name</a></th>
+                    <th>description</th>
+                    <th>Created</th>
+                    <th>owner</th>
+                    <th>Run</th>
+                    <th>Schedule</th>
+                    <th></th>
+                </tr>
+                {% if  dataflows %}
+                {% for flow in dataflows %}
+                
+                
+                <tr>
+                   <td><a href="{% url 'flow-edit' flow.flow_name %}">{{flow.flow_name}}</a></td>
+                   <td>{{flow.description}}</td>
+                   <td>{{flow.created_at}}</td>
+                   <td>{{flow.profile}}</td>
+                    <td><button><a href="{% url 'runflow'%}">Run</a></button></td>
+                    <td><button><a href="{% url 'schedule'%}">Schedule</a></button></td>
+                    <td><a href="{% url 'flow-delete' flow.flow_name %}">X</a></td>
+                   
+                </tr>
+                {% endfor %}
+                {% else %}
+                <p>No flow created yet</p>
+                {% endif %}
+            </table>
+        </div>
+
+
+    </div>
+</div>
+    
+</body>
+</html>
