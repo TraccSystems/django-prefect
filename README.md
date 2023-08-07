@@ -29,8 +29,8 @@
    2. write_data_to_postgress
    3. download_file_from_s3_upload_to_postgres
       all flow are in flow.py
-  
-   type prefect deploy flow.py:download_file_from_s3_upload_to_postgres -n my-deployment -p userflow-process-pool 
+  # to deploy 
+    type prefect deploy flow.py:download_file_from_s3_upload_to_postgres -n my-deployment -p userflow-process-pool 
    
    
 
