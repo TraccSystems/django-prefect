@@ -1,0 +1,116 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{request.user.email}}</title>
+</head>
+<link rel="stylesheet" href="{% static 'flowapp/main.css' %}">
+<script src="{% static 'flowapp/main.js' %}" defer></script>
+<body>
+
+<div class="menu-header"></div>
+
+<div class="wrapper-container">
+
+   <!--navbar-->
+    <div class="navbar">
+        <li><a href="{% url 'profile' %}">Connections</a></li>
+        <li><a href="{% url 'flow' %}">Flows</a></li>
+    </div>
+     <!--navbar-->
+
+    <!--page-content-->
+    <div class="page-content">
+        <button class="connection_btn"> Add new flows</button>
+
+
+         <div class="my-connection">
+            
+            <p>My flows</p>
+            {% if s3connections %}
+            {% for s3connection in s3connections %}
+            <div class="connections_details">
+                <span>S3</span> 
+                <br>
+                <span>bucket_name:{{s3connection.bucket_name}}</span> <span>aws_region: {{s3connection.aws_region}}</span> <span>Type: {{s3connection.s3_connection_type}}</span>
+            </div>
+              
+            {% endfor %}
+              
+            {% endif %}
+
+          
+         </div>
+
+         
+
+
+        <!--form-container-->
+        <div class="connections-form-container">
+
+            <div class="form-title">
+                <p> Add flows</p>
+            </div>
+
+
+            <div class="connection_forms">
+                <div class="flow-forms">
+                <form action="{% url 'flow' %}" method="post">
+                    {% csrf_token %}
+                    {{form.non_field_errors }}
+
+                    <label for="{{ form.source.id_for_label }}">Source</label>
+                    <br/>
+                    <br/>
+                    {{ form.source }}
+                <br/>
+                <br/>
+
+                <label for="{{ form.target.id_for_label }}">Target</label>
+                <br/>
+                <br/>
+                {{ form.target }}
+            <br/>
+            <br/>
+                <input type="submit" value="save">
+            </form>
+              
+        </div>
+            </div>
+      
+
+            </div>
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
+        </div>
+         <!--form-container-->
+    </div>
+    <!--page-content-->
+   
+</div>
+    
+</body>
+</html>

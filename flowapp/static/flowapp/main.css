@@ -62,116 +62,144 @@ input[type=submit]:hover{
 .wrapper-container{
     width: 100%;
     display: flex;
-    flex-wrap: wrap;
-}
-
-.wrapper-container .flow-container{
-    width: 80%;
-    padding: 15px 20px;
+    flex-wrap: nowrap;
+   
 }
 
 .wrapper-container .navbar{
-    width: 20%;
-    height: 30em;
-    padding: 10px 8px;
-    border-right: 1px solid rgb(203, 202, 202);
+    width: 15%;
+    height: 60rem;
+   background-color: rgb(3, 36, 36);
+   text-align: center;
 }
+ .navbar li{
+    margin-top: 10px;
+    list-style: none;
+}
+.navbar li a{
+    list-style: none;
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    text-transform: capitalize;
+    color: whitesmoke;
 
-.create-flow-btn button{
-    width: 100px;
-    padding: 15px 10px;
-    border: 1px solid rgb(203, 202, 202);
-    border-radius: 5px;
+}
+.connection_btn{
+    padding: 10px;
     cursor: pointer;
-}
-
-.create-flow-btn button:hover{
-    width: 100px;
-    padding: 15px 10px;
-    background-color: rgb(27, 109, 136);
     border-radius: 5px;
-    cursor: pointer;
-    transition: 1s linear;
-    color: white;
+    outline: none;
+    margin-top: 10px;
 }
 
-.flow-table{
+.connection_btn:hover{
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    outline: none;
+    border: 1px solid rgb(3, 36, 36);
+}
+
+.navbar li a:hover{
+    list-style: none;
+    background-color: whitesmoke;
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    text-transform: capitalize;
+    color: black;
+
+}
+.navbar li a:active{
+    list-style: none;
+    background-color: whitesmoke;
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    text-transform: capitalize;
+    color: black
+
+}
+
+.wrapper-container .page-content{
+    padding: 10px 20px;
+    width: 80%;  
+}
+
+.connections-form-container{
+    display: none;
+    width: 50%;
+    background-color: lightgray;
+    z-index: 10px;
+    position: absolute;
+    left: 30%;
+    top: 30%;
+    border-radius: 5px;
+    padding: 10px;
+    transition: linear 1s display;
+}
+.connections-form-container .form-title{
     width: 100%;
-    margin-top: 20px;
+    border-bottom: 1px solid whitesmoke;
+    padding: 5px 10px;
     text-align: center;
 }
-.flow-table table{
-    width: 90%;
-    border-collapse: collapse;
+
+.connection_selection{
+    padding: 15px;
+}
+.connection_selection select{
+    padding: 10px 20px;
+    border-radius: 4px;
 }
 
-.flow-table table a{
-    text-decoration: none;
-}
-.flow-table table button{
-    width: 90%;
-   padding: 5px 5px;
-   border-radius: 5px;
-
-}
-.flow-table table button:hover{
-    width: 90%;
-   padding: 5px 5px;
-   background-color: rgb(27, 109, 136);
-    cursor: pointer;
-    transition: 1s linear;
-    color: white;
-}
-.flow-table table,th,td{
- border-bottom: 1px solid #ddd;
-  text-align: justify;
-  padding: 8px;
+.connection_forms{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    align-content: space-between;
 }
 
-.flow-table tr:hover{
-    background-color: rgb(27, 109, 136);
-    border-radius: 5px;
-    cursor: pointer;
-    transition: 1s linear;
-    color: white;
-   }
+.connection_forms div{ 
+    padding: 20px 20px;
+    width: 350px;
+    margin-right: 10px;
+}
+
+.connection_forms div select{
+    padding: 10px 20px;
+    border-radius: 4px;
+}
+
+.my-connection{
+    width: 60%;
+    margin: auto;
    
+}
 
-   .flow-form{
+
+
+.formtabs{
     display: none;
-    position: absolute;
-    width: 400px;
-    margin: auto;
-    padding: 30px 30px;
-    margin-top: 5%;
-    border: 1px solid rgb(203, 202, 202);
-    border-radius: 10px;
-    text-align: justify;
-    left: 35%;
-    background-color: #ddd;
-    transition: 1s diplay;
-    
+}
+
+.connections_details{
+    padding: 10px 20px;
+    border-radius: 4px;
+    width: 70%;
+    border: 1px solid black;
+    margin-bottom: 15px;
+}
+.connections_details span{
+   margin: 15px;
 }
 
 
-.select-container{
-    width: 50%;
-    margin: auto;
+.flow-forms{
+    padding: 10px 20px;
 }
 
-.select-container select{
-    width: 330px;
-   height: 40px;
-   text-indent: 10px;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    border: 1px solid rgb(203, 202, 202);
-    border-radius: 5px;
-}
-.flow-container .s3Source{
-    display: none
-}
-
-.flow-container .postgress{
-    display: none;
+.flow-forms select{
+    width: 300px;
 }

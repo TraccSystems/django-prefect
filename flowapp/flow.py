@@ -11,11 +11,13 @@ from prefect.blocks.system import JSON
 from prefect_aws.s3 import S3Bucket,s3_download,s3_upload,s3_list_objects
 from . digital_ocean_block import DigitalOceanCredential,PostGresCredential
 from typing import Optional
+from prefect_aws import AwsCredentials,AwsClientParameters
+from prefect.server.schemas.schedules import IntervalSchedule
 
 region_name='nyc3',
-endpoint_url='https://nyc3.digitaloceanspaces.com',
-aws_access_key_id='DO003MHYBNBDRQFMYKCV',
-aws_secret_access_key='5H60lnPWHgWeSgx7548erltDaoYT9Zt/co9oRJu0ujg',
+endpoint_url='demo',
+aws_access_key_id='myapi-key',
+aws_secret_access_key='my-secret-key',
 bucket_name ="scrap_data"
 
 @task(name='pull_data_from_s3_write_to_postgress')
@@ -53,6 +55,7 @@ def download_file_from_s3_upload_to_postgres():
 
 
 
+
 @flow(name='save_asw_credentials')
 def save_asw_credentials(aws_access_key_id, aws_secret_access_key,endpoint_url,region_name,name):
     digital_credential = DigitalOceanCredential(
@@ -73,8 +76,21 @@ def save_progres_credentials(database_name,host,password,
             )
     postgress_credential.save(database_name,overwrite=True)
     
-
+@flow(name="connect_to_digitalOcean")
+def save_as():
+    aws_credentials = AwsCredentials(
+        aws_access_key_id='my-key-id',
+        aws_secret_access_key='my-secrete',
+    )
+    aws_credentials.get_boto3_session().client('s3',endpoint_url='https://nyc3.digitaloceanspaces.com')
     
+  
 
+@flow()
+def loadgaga():
+   data = AwsCredentials.load("lover")
+   s3_object = s3_list_objects(bucket='scrap-data',aws_credentials=data)
+   print(s3_object)
+   
 
 

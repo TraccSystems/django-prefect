@@ -39,3 +39,25 @@ dask-worker-space/
 # VCS
 .git/
 .hg/
+traccflow/
+templates/
+userFlow/
+static/
+flowapp/
+
+.gitignore
+db.sqlite3
+
+forms.py
+models.py
+urls.py
+views.py
+requirements.txt
+
+prefect.yaml
+manage.py
+flow.py
+text.py
+README.md
+apps.py
+

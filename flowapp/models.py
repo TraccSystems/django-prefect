@@ -72,30 +72,19 @@ class UserProfile(models.Model):
     def __str__(self) -> str:
         return self.user.email
     
-
-
-class dataFlow(models.Model):
-    flow_name = models.CharField(max_length=255,unique=True)
-    description = models.TextField()
-    created_at = models.DateField(auto_now=True)
-    profile = models.ForeignKey(UserProfile,on_delete=models.CASCADE)
-
-    def __str__(self) -> str:
-        return self.flow_name
-    
-    class Mata:
-        ordering =['created_at']
     
 
-class S3Sourecs(models.Model):
+class S3_connections(models.Model):
+    CONNECTION = [('Source','Source'),('Target','Target')]
     aws_access_key_id = models.CharField(max_length=200,unique=True)
-    aws_region   = models.CharField(max_length=200)
+    aws_region = models.CharField(max_length=200)
     aws_endpoint_url  = models.CharField(max_length=200)
-    aws_secret_access_key   = models.CharField(max_length=200)
+    aws_secret_access_key  = models.CharField(max_length=200)
     bucket_name  = models.CharField(max_length=200,unique=True)
-    file_type   = models.CharField(max_length=200,default='csv')
+    file_type  = models.CharField(max_length=200,default='csv')
+    s3_connection_type = models.CharField(max_length=10,choices=CONNECTION)
     created_at = models.DateField(auto_now=True)
-    dataflows = models.ForeignKey(dataFlow,on_delete=models.CASCADE)
+    owner = models.ForeignKey(UserProfile,on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return self.bucket_name
@@ -104,38 +93,71 @@ class S3Sourecs(models.Model):
         ordering = ['created_at']
 
 
-class PygonSource(models.Model):
+class Postgress_connections(models.Model):
+    CONNECTION = [('Source','Source'),('Target','Target')]
     database_name = models.CharField(max_length=20,unique=True)
     host = models.CharField(max_length=30)
     password = models.CharField(max_length=16,unique=True)
     port = models.CharField(max_length=5,default='5423')
-    schema = models.CharField(max_length=20,default='public')
     username = models.CharField(max_length=20,unique=True)
+    post_connection_type = models.CharField(max_length=10,choices=CONNECTION)
     created_at = models.DateField(auto_now=True)
-    dataflows = models.ForeignKey(dataFlow,on_delete=models.CASCADE)
+    owner = models.ForeignKey(UserProfile,on_delete=models.CASCADE)
 
-    def __str__(self) -> str:
-        return self.database_name 
 
     class Meta:
         ordering = ['created_at']
 
-class IntervalScheduleSchedule(models.Model):
-    interval_select = [('Minutes','Minutes'),('Hours','Hours'),('Seconds','Seconds')]
-    timezone_value  = [('UTC','UTC')]
-    value = models.CharField(max_length=20)
-    interval = models.CharField(max_length=20,choices=interval_select)
-    start_date = models.DateTimeField()
-    timezone = models.CharField(max_length=255,choices=timezone_value)
-    dataflows = models.ForeignKey(dataFlow,on_delete=models.CASCADE)
 
+
+class Pinecone_connection(models.Model):
+    CONNECTION = [('Source','Source'),('Target','Target')]
+    api_key = models.CharField(max_length=255,unique=True)
+    environment = models.CharField(max_length=255)
+    index_name = models.CharField(max_length=255)
+    pincon_connection_types = models.CharField(max_length=10,choices=CONNECTION)
+    created_at = models.DateField(auto_now=True)
+    owner = models.ForeignKey(UserProfile,on_delete=models.CASCADE)
+
+
+    def __str__(self) -> str:
+        return self.index_name
+    
 
     class Meta:
-        ordering = ['start_date']
+        ordering = ['created_at']
+
+
+class SingleStoreDB_connections(models.Model):
+    CONNECTION = [('Source','Source'),('Target','Target')]
+    single_connection_types = models.CharField(max_length=10,choices=CONNECTION)
+    table_name = models.CharField(max_length=255,default='scrap_data')
+    created_at = models.DateField(auto_now=True)
+    singledb_url = models.CharField(max_length=255)
+    created_at = models.DateField(auto_now=True)
+    owner = models.ForeignKey(UserProfile,on_delete=models.CASCADE)
+
+    
+
+    class Meta:
+        ordering = ['created_at']
 
 
 
-     
+class Flows(models.Model):
+    SOURCE= [('S3','S3')]
+    TARGET = [('Pinecone','Pinecone'),('Postgress','Postgress'),('SingleStore','SingleStore')]
+    source = models.CharField(max_length=255,choices=SOURCE)
+    target = models.CharField(max_length=255,choices=TARGET)
+    owner = models.ForeignKey(UserProfile,on_delete=models.CASCADE)
+    created_at = models.DateField(auto_now=True)
+
+    def __str__(self) -> str:
+        return self.target
+
+    class Meta:
+        ordering = ['created_at']
+
 
 
 

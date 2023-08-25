@@ -9,70 +9,297 @@
 <link rel="stylesheet" href="{% static 'flowapp/main.css' %}">
 <script src="{% static 'flowapp/main.js' %}" defer></script>
 <body>
+
 <div class="menu-header"></div>
 
 <div class="wrapper-container">
-    <div class="flow-form">
-        <form action="{% url 'profile' %}" method="post">
-            {% csrf_token %}
-            {{ form.non_field_errors }}
-            {% for field in form %}
-           
-            {{ field.label_tag }} <br/>
-            {{ field }}
-            <br/>
-            {{ field.errors }}
-            {% if field.help_text %}
-            <p class="help">{{ field.help_text|safe }}</p>
+
+   <!--navbar-->
+    <div class="navbar">
+        <li><a href="{% url 'profile' %}">Connections</a></li>
+        <li><a href="{% url 'flow' %}">Flows</a></li>
+       
+    </div>
+     <!--navbar-->
+
+    <!--page-content-->
+    <div class="page-content">
+        <button class="connection_btn"> Add new Conections</button>
+
+
+         <div class="my-connection">
+            
+            <p>My Connection</p>
+            {% if s3connections %}
+            {% for s3connection in s3connections %}
+            <div class="connections_details">
+                <span>S3</span> 
+                <br>
+                <span>bucket_name:{{s3connection.bucket_name}}</span> <span>aws_region: {{s3connection.aws_region}}</span> <span>Type: {{s3connection.s3_connection_type}}</span>
+            </div>
+              
+            {% endfor %}
+              
             {% endif %}
 
+            {% if pgres_connection %}
+            {% for pgres_connections in pgres_connection %}
+            <div class="connections_details">
+                <span>Postgress</span> 
+                <br>
+                <span>Database:{{pgres_connections.database_name}}</span> <span>username: {{pgres_connections.username}}</span> <span>Type: {{pgres_connections.post_connection_type}}</span>
+            </div>
+              
             {% endfor %}
+              
+            {% endif %}
 
-            <input type="submit" value="create">
-        </form>
-    </div>
-    <div class="navbar"></div>
+            {% if pincone_connections %}
+            {% for pincone_connection in pincone_connections %}
+            <div class="connections_details">
+                <span>Pincone</span> 
+                <br>
+                <span>Database:{{pincone_connection.index_name}}</span> <span>enviroment: {{pincone_connection.environment}}</span> <span>Type: {{pincone_connection.pincon_connection_types}}</span>
+            </div>
+              
+            {% endfor %}
+              
+            {% endif %}
+
+            {% if singlestore_connections %}
+            {% for singlestore_connection in singlestore_connections %}
+            <div class="connections_details">
+                <span>SingleStore</span> 
+                <br>
+                <span>singledb_url:{{singlestore_connection.singledb_url}}</span>  <span>Type: {{singlestore_connection.single_connection_types}}</span>
+            </div>
+              
+            {% endfor %}
+              
+            {% endif %}
+            
+         </div>
+
+         
 
 
-    <div class="flow-container">
-        <div class="create-flow-btn">
-            <button class="flowbtn">Create Flow</button>
+        <!--form-container-->
+        <div class="connections-form-container">
+            <div class="form-title">
+                <p> Add Connections</p>
+            </div>
+            
+            <!--connection selection-->
+        <div class="connection_selection">
+            <select class="connections" name="connections">
+                <option >Select connections</option>
+                <option value="S3">S3</option>
+                <option value="Postgress">Postgress</option>
+                <option value="Pinecone">Pinecone</option>
+                <option value="SingleStore">SingleStore</option>
+            </select>
         </div>
+            <!--connection selection-->
 
-        <div class="flow-table">
-            <table>
-                <tr>
-                    <th>Name</a></th>
-                    <th>description</th>
-                    <th>Created</th>
-                    <th>owner</th>
-                    <th>Run</th>
-                    <th>Schedule</th>
-                    <th></th>
-                </tr>
-                {% if  dataflows %}
-                {% for flow in dataflows %}
+<!--s3form-->
+        <div class="formtabs">
+            <form action="{% url 'profile' %}" method="post">
+                {% csrf_token %}
+            <div class="connection_forms">
+                {{s3form.non_field_errors }}
+
+                <div class="fieldWrapper">
+                    <label for="{{ s3form.aws_access_key_id.id_for_label }}">Aws accesskey id</label>
+                    <br>
+                    {{ s3form.aws_access_key_id }}
+                    <br>
+
+                    <label for="{{ s3form.aws_endpoint_url.id_for_label }}"> Aws endpoint url</label>
+                    <br/>
+                    {{ s3form.aws_endpoint_url }}
+
+                    <br>
+                    <label for="{{ s3form.aws_region.id_for_label }}"> Aws region</label>
+                    <br>
+                    {{ s3form.aws_region }}
+                </div>
+
+
+                <div class="fieldWrapper">
+                    <label for="{{s3form.aws_secret_access_key.id_for_label }}">Aws secret access key:</label>
+                    {{s3form.aws_secret_access_key }}
+
+                    <label for="{{s3form.bucket_name.id_for_label }}">Bucket name:</label>
+                    <br>
+                    {{s3form.bucket_name }}
+                    <br>
+
+                    <br>
+
+                    <label for="{{s3form.file_type.id_for_label }}">file_type:</label>
+                    <br>
+                    {{s3form.file_type}}
+                    <br>
+
+                    <label for="{{s3form.s3_connection_type.id_for_label }}">Connection type:</label>
+                    <br/>
+                    {{s3form.s3_connection_type}}
+                </div>
+
+                </div>
+                <input type="submit" value="save">
+            </form>
+            </div>
+        <!--s3form-->
+
+
+                <!--Postgressform-->
+                <div class="formtabs">
+                    <form action="{% url 'profile' %}" method="post">
+                        {% csrf_token %}
+                <div class="connection_forms">
+
+                    {{postgresform.non_field_errors }}
+    
+                    <div class="fieldWrapper">
+                       
+                        <label for="{{postgresform.database_name.id_for_label }}">Database name</label>
+                        <br>
+                        {{postgresform.database_name}}
+                        <br>
+    
+                        <label for="{{ postgresform.host.id_for_label }}"> Host</label>
+                        <br/>
+                        {{ postgresform.host }}
+                        <br>
+                        <label for="{{ postgresform.username.id_for_label }}"> Username</label>
+                        <br>
+                        {{ postgresform.username }}
+                    </div>
+    
+                    <div class="fieldWrapper">
+                        <label for="{{postgresform.password.id_for_label }}">Password:</label>
+                        {{postgresform.password }}
+                        <br>
+                        <label for="{{postgresform.port.id_for_label }}">port:</label>
+                        <br>
+                        {{postgresform.port}}
+                        <br>
+    
+                        <label for="{{postgresform.post_connection_type.id_for_label }}">Connection type:</label>
+                        <br/>
+                        <br/>
+                        {{postgresform.post_connection_type}}
+                    </div>
+
+                    </div>
+                     <input type="submit" value="save">
+                   </form>
+                </div>
+
+                <!--Postgressform-->
+
+
+                 <!--Pineconeform-->
+                 <div class="formtabs">
+                    <form action="{% url 'profile' %}" method="post">
+                        {% csrf_token %}
+                 <div class="connection_forms">
+                    {{pinconeform.non_field_errors }}
+    
+                    <div class="fieldWrapper">
+                        <label for="{{pinconeform.api_key.id_for_label }}">Api key</label>
+                        <br>
+                        {{pinconeform.api_key}}
+                        <br>
+    
+                        <label for="{{ pinconeform.environment.id_for_label }}">Environment</label>
+                        <br/>
+                        {{ pinconeform.environment }}
+                    </div>
+    
+                    <div class="fieldWrapper">
+                        <label for="{{pinconeform.index_name.id_for_label }}">Index name:</label>
+                        {{pinconeform.index_name }}
+                        <br>
+                        <label for="{{pinconeform.connection_types.id_for_label }}">Connection type:</label>
+                        <br/>
+                        <br/>
+                        {{pinconeform.pincon_connection_types}}
+                    </div>
+
+                 </div>
+                 <input type="submit" value="save">
+                </form>
+                </div>
+                <!--Pineconeform-->
+
+
+                 <div class="formtabs">
+                 <!--SingleStoreDB-->
+                 <form action="{% url 'profile' %}" method="post">
+                    {% csrf_token %}
+                 <div class="connection_forms">
+                    {{singlestoreform.non_field_errors }}
+    
+                    <div class="fieldWrapper">
                 
+                        <label for="{{singlestoreform.singledb_url.id_for_label }}">Singledb url</label>
+                        <br>
+                        {{singlestoreform.singledb_url}}
+
+                        <label for="{{singlestoreform.table_name.id_for_label }}">Table name</label>
+                        <br>
+                        {{singlestoreform.table_name}}
                 
-                <tr>
-                   <td><a href="{% url 'flow-edit' flow.flow_name %}">{{flow.flow_name}}</a></td>
-                   <td>{{flow.description}}</td>
-                   <td>{{flow.created_at}}</td>
-                   <td>{{flow.profile}}</td>
-                    <td><button><a href="{% url 'runflow'%}">Run</a></button></td>
-                    <td><button><a href="{% url 'schedule'%}">Schedule</a></button></td>
-                    <td><a href="{% url 'flow-delete' flow.flow_name %}">X</a></td>
-                   
-                </tr>
-                {% endfor %}
-                {% else %}
-                <p>No flow created yet</p>
-                {% endif %}
-            </table>
+                    </div>
+    
+                    <div class="fieldWrapper">
+        
+                        <label for="{{singlestoreform.connection_types.id_for_label }}">Connection type:</label>
+                        <br/>
+                        <br/>
+                        {{singlestoreform.single_connection_types}}
+                    </div>
+                 </div>
+                 <input type="submit" value="save">
+                </form>
+                </div>
+
+                <!--SingleStoreDB-->
+
+
+
+
+            </div>
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
         </div>
-
-
+         <!--form-container-->
     </div>
+    <!--page-content-->
+   
 </div>
     
 </body>
