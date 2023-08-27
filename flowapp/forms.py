@@ -15,11 +15,18 @@ from django import forms
 
 
 class S3ConnectionForm(ModelForm):
+   
     class Meta:
         model = S3_connections_aws
         fields = ("connection_name","aws_access_key_id","key",
                   "aws_secret_access_key","bucket_name",
                   "file_type","s3_connection_type")
+        
+    def __init__(self,*args, **kwargs):
+        super(S3ConnectionForm, self).__init__(*args, **kwargs)
+        self.fields['key'].widget.attrs.update({'placeholder':'Example : Article/somedata'})
+       
+   
         
 class PostgressConnectionForm(ModelForm):
     class Meta:

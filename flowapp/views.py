@@ -75,7 +75,6 @@ def profile(request):
         pinconeform = PineconeConnectionForm()
         singlestoreform = SingleStoreDBConnectionsForm()
         # connections form contexts
-        print(Postgress_connections.objects.filter(owner=owner))
     return render(request,'flowapp/profile.html',{
             's3form': s3form,
             "postgresform":postgresform,
