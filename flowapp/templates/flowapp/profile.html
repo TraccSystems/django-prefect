@@ -35,7 +35,7 @@
             <div class="connections_details">
                 <span>S3</span> 
                 <br>
-                <span>bucket_name:{{s3connection.bucket_name}}</span> <span>aws_region: {{s3connection.aws_region}}</span> <span>Type: {{s3connection.s3_connection_type}}</span>
+                <span>bucket_name:{{s3connection.bucket_name}}</span> <span>key: {{s3connection.key}}</span> <span>Type: {{s3connection.s3_connection_type}}</span>
             </div>
               
             {% endfor %}
@@ -86,7 +86,9 @@
         <!--form-container-->
         <div class="connections-form-container">
             <div class="form-title">
+                <button class="close_btn">X</button>
                 <p> Add Connections</p>
+                
             </div>
             
             <!--connection selection-->
@@ -109,19 +111,22 @@
                 {{s3form.non_field_errors }}
 
                 <div class="fieldWrapper">
+                    <label for="{{ s3form.connection_name.id_for_label }}">Connection Name</label>
+                    <br>
+                    {{ s3form.connection_name }}
+                    <br>
+
                     <label for="{{ s3form.aws_access_key_id.id_for_label }}">Aws accesskey id</label>
                     <br>
                     {{ s3form.aws_access_key_id }}
                     <br>
 
-                    <label for="{{ s3form.aws_endpoint_url.id_for_label }}"> Aws endpoint url</label>
-                    <br/>
-                    {{ s3form.aws_endpoint_url }}
+                    
 
-                    <br>
-                    <label for="{{ s3form.aws_region.id_for_label }}"> Aws region</label>
-                    <br>
-                    {{ s3form.aws_region }}
+                    <label for="{{ s3form.key.id_for_label }}">object key</label>
+                    <br/>
+                    {{ s3form.key}}
+
                 </div>
 
 
@@ -134,14 +139,14 @@
                     {{s3form.bucket_name }}
                     <br>
 
-                    <br>
-
                     <label for="{{s3form.file_type.id_for_label }}">file_type:</label>
                     <br>
+            
                     {{s3form.file_type}}
                     <br>
 
                     <label for="{{s3form.s3_connection_type.id_for_label }}">Connection type:</label>
+                    <br/>
                     <br/>
                     {{s3form.s3_connection_type}}
                 </div>
@@ -162,6 +167,11 @@
                     {{postgresform.non_field_errors }}
     
                     <div class="fieldWrapper">
+
+                        <label for="{{postgresform.connection_name.id_for_label }}">Connection name</label>
+                        <br>
+                        {{postgresform.connection_name}}
+                        <br>
                        
                         <label for="{{postgresform.database_name.id_for_label }}">Database name</label>
                         <br>
@@ -208,6 +218,11 @@
                     {{pinconeform.non_field_errors }}
     
                     <div class="fieldWrapper">
+                        <label for="{{pinconeform.connection_name.id_for_label }}">Connection Name</label>
+                        <br>
+                        {{pinconeform.connection_name}}
+                        <br>
+
                         <label for="{{pinconeform.api_key.id_for_label }}">Api key</label>
                         <br>
                         {{pinconeform.api_key}}
@@ -243,10 +258,9 @@
                     {{singlestoreform.non_field_errors }}
     
                     <div class="fieldWrapper">
-                
-                        <label for="{{singlestoreform.singledb_url.id_for_label }}">Singledb url</label>
+                        <label for="{{singlestoreform.connection_name.id_for_label }}">Connectionn Name</label>
                         <br>
-                        {{singlestoreform.singledb_url}}
+                        {{singlestoreform.connection_name}}              
 
                         <label for="{{singlestoreform.table_name.id_for_label }}">Table name</label>
                         <br>
@@ -255,6 +269,10 @@
                     </div>
     
                     <div class="fieldWrapper">
+                        <label for="{{singlestoreform.singledb_url.id_for_label }}">Singledb url</label>
+                        <br>
+                        {{singlestoreform.singledb_url}}
+
         
                         <label for="{{singlestoreform.connection_types.id_for_label }}">Connection type:</label>
                         <br/>

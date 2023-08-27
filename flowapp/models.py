@@ -74,7 +74,8 @@ class UserProfile(models.Model):
     
     
 
-class S3_connections(models.Model):
+class S3_connections_digital_ocean(models.Model):
+    connection_name = models.CharField(max_length=255)
     CONNECTION = [('Source','Source'),('Target','Target')]
     aws_access_key_id = models.CharField(max_length=200,unique=True)
     aws_region = models.CharField(max_length=200)
@@ -87,14 +88,35 @@ class S3_connections(models.Model):
     owner = models.ForeignKey(UserProfile,on_delete=models.CASCADE)
 
     def __str__(self) -> str:
-        return self.bucket_name
+        return self.connection_name
+
+    class Meta:
+        ordering = ['created_at']
+
+
+
+class S3_connections_aws(models.Model):
+    connection_name = models.CharField(max_length=255)
+    CONNECTION = [('Source','Source')]
+    aws_access_key_id = models.CharField(max_length=200,unique=True)
+    key = models.CharField(max_length=200)
+    aws_secret_access_key  = models.CharField(max_length=200)
+    bucket_name  = models.CharField(max_length=200,unique=True)
+    file_type  = models.CharField(max_length=200,default='csv')
+    s3_connection_type = models.CharField(max_length=10,choices=CONNECTION)
+    created_at = models.DateField(auto_now=True)
+    owner = models.ForeignKey(UserProfile,on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return self.connection_name
 
     class Meta:
         ordering = ['created_at']
 
 
 class Postgress_connections(models.Model):
-    CONNECTION = [('Source','Source'),('Target','Target')]
+    connection_name = models.CharField(max_length=255)
+    CONNECTION = [('Source','Source')]
     database_name = models.CharField(max_length=20,unique=True)
     host = models.CharField(max_length=30)
     password = models.CharField(max_length=16,unique=True)
@@ -105,13 +127,18 @@ class Postgress_connections(models.Model):
     owner = models.ForeignKey(UserProfile,on_delete=models.CASCADE)
 
 
+    def __str__(self) -> str:
+        return self.connection_name
+
+
     class Meta:
         ordering = ['created_at']
 
 
 
 class Pinecone_connection(models.Model):
-    CONNECTION = [('Source','Source'),('Target','Target')]
+    connection_name = models.CharField(max_length=255)
+    CONNECTION = [('Target','Target')]
     api_key = models.CharField(max_length=255,unique=True)
     environment = models.CharField(max_length=255)
     index_name = models.CharField(max_length=255)
@@ -121,7 +148,7 @@ class Pinecone_connection(models.Model):
 
 
     def __str__(self) -> str:
-        return self.index_name
+        return self.connection_name
     
 
     class Meta:
@@ -129,7 +156,8 @@ class Pinecone_connection(models.Model):
 
 
 class SingleStoreDB_connections(models.Model):
-    CONNECTION = [('Source','Source'),('Target','Target')]
+    connection_name = models.CharField(max_length=255)
+    CONNECTION = [('Target','Target')]
     single_connection_types = models.CharField(max_length=10,choices=CONNECTION)
     table_name = models.CharField(max_length=255,default='scrap_data')
     created_at = models.DateField(auto_now=True)
@@ -138,17 +166,17 @@ class SingleStoreDB_connections(models.Model):
     owner = models.ForeignKey(UserProfile,on_delete=models.CASCADE)
 
     
-
+    def __str__(self) -> str:
+        return self.connection_name 
+    
     class Meta:
         ordering = ['created_at']
 
 
 
 class Flows(models.Model):
-    SOURCE= [('S3','S3')]
-    TARGET = [('Pinecone','Pinecone'),('Postgress','Postgress'),('SingleStore','SingleStore')]
-    source = models.CharField(max_length=255,choices=SOURCE)
-    target = models.CharField(max_length=255,choices=TARGET)
+    source = models.ForeignKey(S3_connections_aws,on_delete=models.CASCADE)
+    target = models.ForeignKey(Pinecone_connection,on_delete=models.CASCADE)
     owner = models.ForeignKey(UserProfile,on_delete=models.CASCADE)
     created_at = models.DateField(auto_now=True)
 
@@ -159,6 +187,46 @@ class Flows(models.Model):
         ordering = ['created_at']
 
 
+
+class Flows_s3_to_singlestore(models.Model):
+    source = models.ForeignKey(S3_connections_aws,on_delete=models.CASCADE)
+    target = models.ForeignKey(SingleStoreDB_connections,on_delete=models.CASCADE)
+    owner = models.ForeignKey(UserProfile,on_delete=models.CASCADE)
+    created_at = models.DateField(auto_now=True)
+
+    def __str__(self) -> str:
+        return self.target
+
+    class Meta:
+        ordering = ['created_at']
+
+
+
+class Flows_postgress_to_pinecone(models.Model):
+    source = models.ForeignKey(Postgress_connections,on_delete=models.CASCADE)
+    target = models.ForeignKey(Pinecone_connection,on_delete=models.CASCADE)
+    owner = models.ForeignKey(UserProfile,on_delete=models.CASCADE)
+    created_at = models.DateField(auto_now=True)
+
+    def __str__(self) -> str:
+        return self.target
+
+    class Meta:
+        ordering = ['created_at']
+
+
+
+class Flows_postgress_to_singlestore(models.Model):
+    source = models.ForeignKey(Postgress_connections,on_delete=models.CASCADE)
+    target = models.ForeignKey(SingleStoreDB_connections,on_delete=models.CASCADE)
+    owner = models.ForeignKey(UserProfile,on_delete=models.CASCADE)
+    created_at = models.DateField(auto_now=True)
+
+    def __str__(self) -> str:
+        return self.target
+
+    class Meta:
+        ordering = ['created_at']
 
 
 

@@ -10,9 +10,12 @@ from . forms import (
                      SingleStoreDBConnectionsForm,
                      S3ConnectionForm,
                      FlowsForm,
+                     FlowsForm_S3_to_Singlestore,
+                     FlowsForm_Postgress_to_Pinecone,
+                     FlowsForm_Postgress_to_Singlestore
                      )
 from . models import (Pinecone_connection,
-                      S3_connections,
+                      S3_connections_aws,
                       Postgress_connections,
                       SingleStoreDB_connections,
                       Flows
@@ -78,7 +81,7 @@ def profile(request):
             "postgresform":postgresform,
             "pinconeform":pinconeform,
             "singlestoreform":singlestoreform,
-            "s3connections":S3_connections.objects.filter(owner=owner)[:2],
+            "s3connections":S3_connections_aws.objects.filter(owner=owner)[:2],
             "pgres_connection":Postgress_connections.objects.filter(owner=owner)[:2],
             "pincone_connections": Pinecone_connection.objects.filter(owner=owner)[:2],
             "singlestore_connections":SingleStoreDB_connections.objects.filter(owner=owner)[:2],
@@ -94,43 +97,88 @@ def connection_delete(request,connection_name):
    
     return HttpResponseRedirect('/flows/profile/')
 
-
+@login_required
 def flows(request):
     ## get owner details......................
     owner = get_object_or_404(UserProfile,user=request.user)
-    s3 = S3_connections.objects.filter(owner=owner).first()
+    s3 = S3_connections_aws.objects.filter(owner=owner).first()
     pinecone = Pinecone_connection.objects.filter(owner=owner).first()
     singleStore = SingleStoreDB_connections.objects.filter(owner=owner).first()
     if request.method =="POST":
-        form = FlowsForm(request.POST)
+        
+        form_postgress_pinecone = FlowsForm_Postgress_to_Pinecone(owner,request.POST)
+        form_postgress_singlestore =FlowsForm_Postgress_to_Singlestore(owner,request.POST)
+        form = FlowsForm(owner,request.POST)
+        form_s3_singlestore = FlowsForm_S3_to_Singlestore(owner,request.POST)
         if form.is_valid():
             source = form.cleaned_data['source']
             target = form.cleaned_data['target']
-            if source == "S3" and target == "Pinecone":
-                # generate and upload flow function to s3 then deploy on prefect cloud
-                s3_to_pincone_flow(
-                    request.user,
-                    s3.aws_access_key_id,
-                    s3.aws_secret_access_key,
-                    s3.aws_endpoint_url,
-                    s3.bucket_name,
-                    s3.aws_region,
-                    pinecone.index_name,pinecone.environment,pinecone.api_key)
-            elif source =="S3" and target == "SingleStore":
-                s3_to_singleStore_flow(
-                    request.user,
-                    s3.aws_access_key_id,
-                    s3.aws_secret_access_key,
-                    s3.aws_endpoint_url,
-                    s3.bucket_name,
-                    s3.aws_region,
-                    singleStore.singledb_url,
-                    singleStore.table_name
-                )
+            #get connection details
+            s3_connections = S3_connections_aws.objects.get(connection_name=source)
+            pinecone_connections = Pinecone_connection.objects.get(connection_name=target)
+            
+            
+            ## created and deploy flows to prefect cloud
+
+            s3_to_pincone_flow(owner,
+                               s3_connections.aws_access_key_id,
+                               s3_connections.aws_secret_access_key,
+                               s3_connections.key,
+                               s3_connections.bucket_name,
+                               s3_connections.file_type,
+                               pinecone_connections.index_name,
+                               pinecone_connections.environment,
+                               pinecone_connections.api_key
+                               )
+
             return HttpResponseRedirect('/flows/flow/')
+        
+        elif form_s3_singlestore.is_valid():
+            source = form.cleaned_data['source']
+            target = form.cleaned_data['target']
+
+             #get connection details
+            s3_connections = S3_connections_aws.objects.get(connection_name=source)
+            singlestore_connections = SingleStoreDB_connections.objects.get(connection_name=target)
+
+             ## created and deploy flows to prefect cloud
+
+            s3_to_singleStore_flow(owner,
+                               s3_connections.aws_access_key_id,
+                               s3_connections.aws_secret_access_key,
+                               s3_connections.key,
+                               s3_connections.bucket_name,
+                               s3_connections.file_type,
+                               singlestore_connections.singledb_url,
+                               singlestore_connections.table_name,
+                               )
+
+
+            
+            return HttpResponseRedirect('/flows/flow/')
+        
+        elif form_postgress_pinecone.is_valid():
+            source = form.cleaned_data['source']
+            target = form.cleaned_data['target']
+            return HttpResponseRedirect('/flows/flow/')
+        
+        elif form_postgress_singlestore.is_valid():
+            source = form.cleaned_data['source']
+            target = form.cleaned_data['target']
+            return HttpResponseRedirect('/flows/flow/')
+
+
     else:
-        form = FlowsForm()
-    return render(request,'flowapp/flow.html',{'form':form})
+        form = FlowsForm(owner=owner)
+        form_s3_singlestore = FlowsForm_S3_to_Singlestore(owner=owner)
+        form_postgress_pinecone = FlowsForm_Postgress_to_Pinecone(owner=owner)
+        form_postgress_singlestore =FlowsForm_Postgress_to_Singlestore(owner=owner)
+       
+    return render(request,'flowapp/flow.html',{'s3form':form,
+                                               'form_s3_singlestore': form_s3_singlestore,
+                                               'form_postgress_pinecone': form_postgress_pinecone,
+                                               'form_postgress_singlestore':form_postgress_singlestore
+                                               })
 
 
 
