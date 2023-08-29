@@ -41,7 +41,7 @@ def load_external_document(bucket_name=None,prefix=None):
 @flow(name='pull_data_from_s3_write_to_pincone',retries=2,description="pull data from s3 write to pincone")
 def pull_data_from_s3_write_to_pincone():
         documents = load_external_document(bucket_name='{bucket_name}',prefix='{key}.{file_type}')
-        embeddings = OpenAIEmbeddings(openai_api_key="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")
+        embeddings = OpenAIEmbeddings(openai_api_key="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")
     
         #embedding document to pinecone..........
         pinecone.init(
@@ -124,7 +124,7 @@ def load_external_document(bucket_name=None,prefix=None):
 @flow(name='pull_data_from_s3_write_to_singleStore',retries=2,description="pull data from s3 write to singleStore")
 def pull_data_from_s3_write_to_singleStore():
         documents = load_external_document(bucket_name='{bucket_name}',prefix=f'{aws_secrete_access}.{file_type}')
-        embeddings = OpenAIEmbeddings(openai_api_key=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)
+        embeddings = OpenAIEmbeddings(openai_api_key='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')
     
         #embedding document to SINGLESTOREDB..........
         os.environ["SINGLESTOREDB_URL"] = "{singledb_url}"
