@@ -167,7 +167,7 @@ input[type=submit]:hover{
     margin-right: 10px;
 }
 
-.connection_forms div select{
+.connection_forms div select,input[type=datetime-local]{
     padding: 10px 20px;
     border-radius: 4px;
 }

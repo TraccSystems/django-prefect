@@ -110,11 +110,15 @@ def flows(request):
         form = FlowsForm(owner,request.POST)
         form_s3_singlestore = FlowsForm_S3_to_Singlestore(owner,request.POST)
         if form.is_valid():
+            scheduel_time = form.cleaned_data['scheduel_time']
+            time_zone = form.cleaned_data['time_zone']
             source = form.cleaned_data['source']
             target = form.cleaned_data['target']
             #get connection details
             s3_connections = S3_connections_aws.objects.get(connection_name=source)
             pinecone_connections = Pinecone_connection.objects.get(connection_name=target)
+
+            
             
             
             ## created and deploy flows to prefect cloud
@@ -127,44 +131,15 @@ def flows(request):
                                s3_connections.file_type,
                                pinecone_connections.index_name,
                                pinecone_connections.environment,
-                               pinecone_connections.api_key
+                              pinecone_connections.api_key,
+                              time_zone=time_zone,
+                              scheduel_time=scheduel_time
                                )
 
+           
             return HttpResponseRedirect('/flows/flow/')
         
-        elif form_s3_singlestore.is_valid():
-            source = form.cleaned_data['source']
-            target = form.cleaned_data['target']
-
-             #get connection details
-            s3_connections = S3_connections_aws.objects.get(connection_name=source)
-            singlestore_connections = SingleStoreDB_connections.objects.get(connection_name=target)
-
-             ## created and deploy flows to prefect cloud
-
-            s3_to_singleStore_flow(owner,
-                               s3_connections.aws_access_key_id,
-                               s3_connections.aws_secret_access_key,
-                               s3_connections.key,
-                               s3_connections.bucket_name,
-                               s3_connections.file_type,
-                               singlestore_connections.singledb_url,
-                               singlestore_connections.table_name,
-                               )
-
-
-            
-            return HttpResponseRedirect('/flows/flow/')
         
-        elif form_postgress_pinecone.is_valid():
-            source = form.cleaned_data['source']
-            target = form.cleaned_data['target']
-            return HttpResponseRedirect('/flows/flow/')
-        
-        elif form_postgress_singlestore.is_valid():
-            source = form.cleaned_data['source']
-            target = form.cleaned_data['target']
-            return HttpResponseRedirect('/flows/flow/')
 
 
     else:

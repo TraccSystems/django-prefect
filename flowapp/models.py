@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+import pytz
 # Create your models here.
 
 from django.db import models
@@ -175,16 +176,20 @@ class SingleStoreDB_connections(models.Model):
 
 
 class Flows(models.Model):
+    all_timezones = pytz.all_timezones
+    time_zone_choices = [(tz, tz) for tz in all_timezones]
+    time_zone_choices.sort(key=lambda x: x[0])
     source = models.ForeignKey(S3_connections_aws,on_delete=models.CASCADE)
     target = models.ForeignKey(Pinecone_connection,on_delete=models.CASCADE)
     owner = models.ForeignKey(UserProfile,on_delete=models.CASCADE)
-    created_at = models.DateField(auto_now=True)
+    scheduel_time = models.DateTimeField()
+    time_zone = models.CharField(max_length=255,choices=time_zone_choices)
 
     def __str__(self) -> str:
         return self.target
 
     class Meta:
-        ordering = ['created_at']
+        ordering = ['scheduel_time']
 
 
 
@@ -192,7 +197,7 @@ class Flows_s3_to_singlestore(models.Model):
     source = models.ForeignKey(S3_connections_aws,on_delete=models.CASCADE)
     target = models.ForeignKey(SingleStoreDB_connections,on_delete=models.CASCADE)
     owner = models.ForeignKey(UserProfile,on_delete=models.CASCADE)
-    created_at = models.DateField(auto_now=True)
+    created_at = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
         return self.target

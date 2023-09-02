@@ -52,11 +52,18 @@ class FlowsForm(forms.ModelForm):
     
     class Meta:
         model = Flows
-        fields = ("source",'target')
+        fields = ("source",'target','scheduel_time','time_zone')
+
+        widgets = {
+            'scheduel_time':forms.widgets.DateInput(attrs={'type':'datetime-local'}),
+  
+        }
     def __init__(self, owner, *args, **kwargs):
         super(FlowsForm, self).__init__(*args, **kwargs)
         self.fields['source'].queryset = S3_connections_aws.objects.filter(owner=owner)
         self.fields['target'].queryset = Pinecone_connection.objects.filter(owner=owner)
+        
+       
 
 
 
@@ -95,3 +102,5 @@ class FlowsForm_Postgress_to_Pinecone(forms.ModelForm):
         super(FlowsForm_Postgress_to_Pinecone, self).__init__(*args, **kwargs)
         self.fields['source'].queryset = Postgress_connections.objects.filter(owner=owner)
         self.fields['target'].queryset = Pinecone_connection.objects.filter(owner=owner)
+
+

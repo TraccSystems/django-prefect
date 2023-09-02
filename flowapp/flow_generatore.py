@@ -1,11 +1,14 @@
 from prefect import flow,task
 from prefect.deployments import Deployment
 from prefect_aws.s3 import S3Bucket
+from prefect.server.schemas.schedules import CronSchedule
 
 
 
 def s3_to_pincone_flow(user=None,aws_access_key=None,aws_secrete_access=None,key=None,
-                       bucket_name=None,file_type=None,pincone_index_name=None,pinecone_environment=None,pinecone_api_key=None):
+                       bucket_name=None,file_type=None,pincone_index_name=None,
+                       pinecone_environment=None,pinecone_api_key=None,
+                       time_zone=None,scheduel_time=None,day_or=True):
     
     templates = f"""
 from datetime import datetime
@@ -70,7 +73,7 @@ if __name__ == "__main__":
     except:
         pass
    
-
+   
     storage = S3Bucket.load("s3-connection")
     deployment = Deployment.build_from_flow(
     flow=pull_data_from_s3_write_to_pincone,    
@@ -81,10 +84,12 @@ if __name__ == "__main__":
     storage=storage,
     entrypoint ="pinecone_user_flow.py:pull_data_from_s3_write_to_pincone",
     apply=True,
+    schedule=(CronSchedule(cron=f"{scheduel_time.minute} {scheduel_time.hour} {scheduel_time.day} {scheduel_time.month} *", timezone=time_zone,day_or=day_or)),
     ignore_file ='.prefectignore',
     description="pull data from s3 write to pincone"
         )  
     deployment.apply()
+    
 
 
 
@@ -167,6 +172,7 @@ if __name__ == "__main__":
     description="pull data from s3 write to singleStore"
         )  
     deployment.apply()
+
     
 
 
