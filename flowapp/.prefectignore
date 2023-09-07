@@ -1,0 +1,63 @@
+# prefect artifacts
+.prefectignore
+
+# python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+
+# Type checking artifacts
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+
+# IPython
+profile_default/
+ipython_config.py
+*.ipynb_checkpoints/*
+
+# Environments
+.python-version
+.env
+.venv
+env/
+venv/
+
+# MacOS
+.DS_Store
+
+# Dask
+dask-worker-space/
+
+# Editors
+.idea/
+.vscode/
+
+# VCS
+.git/
+.hg/
+traccflow/
+templates/
+userFlow/
+static/
+flowapp/
+
+.gitignore
+db.sqlite3
+
+forms.py
+models.py
+urls.py
+views.py
+requirements.txt
+
+prefect.yaml
+manage.py
+flow.py
+text.py
+README.md
+apps.py
+

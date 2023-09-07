@@ -3,16 +3,13 @@ from django.conf import settings
 from django.db.models.signals import post_save
 from .models import UserProfile
 from . models import UserProfile
-from . flow_generatore import s3_to_pincone_flow,s3_to_singleStore_flow
+from . flow_generatore import generate_flow
 from . forms import (
                      PostgressConnectionForm,
                      PineconeConnectionForm,
                      SingleStoreDBConnectionsForm,
                      S3ConnectionForm,
                      FlowsForm,
-                     FlowsForm_S3_to_Singlestore,
-                     FlowsForm_Postgress_to_Pinecone,
-                     FlowsForm_Postgress_to_Singlestore
                      )
 from . models import (Pinecone_connection,
                       S3_connections_aws,
@@ -105,10 +102,7 @@ def flows(request):
     singleStore = SingleStoreDB_connections.objects.filter(owner=owner).first()
     if request.method =="POST":
         
-        form_postgress_pinecone = FlowsForm_Postgress_to_Pinecone(owner,request.POST)
-        form_postgress_singlestore =FlowsForm_Postgress_to_Singlestore(owner,request.POST)
         form = FlowsForm(owner,request.POST)
-        form_s3_singlestore = FlowsForm_S3_to_Singlestore(owner,request.POST)
         if form.is_valid():
             scheduel_time = form.cleaned_data['scheduel_time']
             time_zone = form.cleaned_data['time_zone']
@@ -144,15 +138,8 @@ def flows(request):
 
     else:
         form = FlowsForm(owner=owner)
-        form_s3_singlestore = FlowsForm_S3_to_Singlestore(owner=owner)
-        form_postgress_pinecone = FlowsForm_Postgress_to_Pinecone(owner=owner)
-        form_postgress_singlestore =FlowsForm_Postgress_to_Singlestore(owner=owner)
        
-    return render(request,'flowapp/flow.html',{'s3form':form,
-                                               'form_s3_singlestore': form_s3_singlestore,
-                                               'form_postgress_pinecone': form_postgress_pinecone,
-                                               'form_postgress_singlestore':form_postgress_singlestore
-                                               })
+    return render(request,'flowapp/flow.html',{'s3form':form})
 
 
 

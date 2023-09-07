@@ -18,7 +18,7 @@ def generate_flow(user=None,
 
     templated_code = {
 
-    "S3": {"function_name": "load_external_document()",
+    "s3": {"function_name": "load_external_document()",
             "code": f"""
 os.environ["AWS_ACCESS_KEY_ID"] = "{source_credentials.get('aws_access_key')}"
 os.environ["AWS_SECRET_ACCESS_KEY"] = "{source_credentials.get('aws_secret_access_key')}"
@@ -39,7 +39,7 @@ documents = load_external_document(
             """
               },
 
-    "Github":{
+    "github":{
         "function_name":"load_external_document()",
         "code":f"""
 def load_external_document(repo=None,access_token=None,creator=None,include_prs=False):
@@ -88,7 +88,7 @@ documents = load_external_document(
 
 
     
-    "Googledrive":{
+    "googledrive":{
         "function_name":"load_external_document()",
         "code":f"""
 def load_external_document(gdrive_api_file=None,
@@ -125,7 +125,7 @@ documents = load_external_document(
     },
 
 
-     "AzureblobStorage":{
+     "azureblogStorage":{
         "function_name":"load_external_document()",
         "code":f"""
 def load_external_document(conn_str=None,container=None,blob_name=None):
@@ -148,7 +148,7 @@ documents = load_external_document(
                 """
     },
 
-    "AzureblobContainer":{
+    "azureblogContainer":{
         "function_name":"load_external_document()",
         "code":f"""
 def load_external_document(conn_str=None,container=None):
@@ -170,7 +170,7 @@ documents = load_external_document(
                 """
     },
 
-    "Snowflake":{
+    "snowflake":{
         "function_name":"load_external_document()",
         "code":f"""
 def load_external_document(query=None,
@@ -219,7 +219,7 @@ documents = load_external_document(
 
 
 
-    "Pinecone": {"function_name": "pull_data_from_source_to_target()",
+    "pinecone": {"function_name": "pull_data_from_source_to_target()",
                 "code": f"""
 
 @flow(name='pull_data_from_source_to_pincone',retries=2,description="pull data from source write to pincone")
@@ -248,7 +248,7 @@ def pull_data_from_source_to_target():
 
 
 
-    "SingleStoreDB": {"function_name": "pull_data_from_source_to_target()",
+    "singlestore": {"function_name": "pull_data_from_source_to_target()",
                     "code": f"""
 
 @flow(name='pull_data_from_source_to_singleStore',retries=2,description="pull data from source write to singleStore")
@@ -264,7 +264,7 @@ def pull_data_from_source_to_target():
                    },
 
     
-    "Elasticsearch": {"function_name": "pull_data_from_source_to_target()",
+    "elasticsearch": {"function_name": "pull_data_from_source_to_target()",
                     "code": f"""
 @flow(name='pull_data_from_source_to_elasticsearch',retries=2,description="pull data from source write to elasticsearch")
 def pull_data_from_source_to_target():
@@ -284,7 +284,7 @@ def pull_data_from_source_to_target():
                     
                    },
 
-    "Qdrant": {"function_name": "pull_data_from_source_to_target()",
+    "qdrant": {"function_name": "pull_data_from_source_to_target()",
                     "code": f"""
 @flow(name='pull_data_from_source_to_qdrant',retries=2,description="pull data from source write to qdrant")
 def pull_data_from_source_to_target():
@@ -304,7 +304,7 @@ def pull_data_from_source_to_target():
                    },
         
         
-    "Weaviatdb": {"function_name": "pull_data_from_source_to_target()",
+    "weaviatdb": {"function_name": "pull_data_from_source_to_target()",
                     "code": f"""
 @flow(name='pull_data_from_source_to_weaviatdb',retries=2,description="pull data from source write to weaviatdb")
 def pull_data_from_source_to_target():
@@ -413,6 +413,7 @@ target_credentials ={
     'api_key':'788fc40b-a4bd-40b6-b4c5-6d02ae274428',
     'environment':"us-west4-gcp-free",
     "index_name":"scrap-data"
+    
 
 }
 
