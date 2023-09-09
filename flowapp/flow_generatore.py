@@ -416,15 +416,137 @@ target_credentials ={
 
 }
 
-dt  = datetime.datetime.now()
+### source functions
+
+
+def s3_credentials(aws_access_key=None,aws_secret_access_key=None,bucket_name=None,prefix=None,file_type=None):
+   source_credentials = {
+    "aws_access_key": aws_access_key,
+    "aws_secret_access_key":aws_secret_access_key,
+    "bucket_name":bucket_name,
+    "prefix":prefix,
+    "file_type":file_type
+   
+    }
+   return source_credentials
 
 
 
-generate_flow(user='owolabi',
-              source='s3',
-              target='pinecone',
-              source_credentials=source_credentials,
-              target_credentials=target_credentials,
-              time_zone="America/New_York",
-              scheduel_time=dt
-              )
+def googledrive_credentials(gdrive_api_file=None,folder_id=None,recursive=None,template=None,query=None,num_results=None,supportsAllDrives=None):
+   source_credentials = {
+    "gdrive_api_file": gdrive_api_file,
+    "folder_id":folder_id,
+    "recursive":recursive,
+    "template":template,
+    "query":query,
+    "num_results":num_results,
+    "supportsAllDrives":supportsAllDrives 
+    }
+   return source_credentials
+
+
+def notion_credentials(integration_token=None,database_id=None,request_timeout_sec=None):
+   source_credentials = {
+    "integration_token":integration_token,
+    "database_id":database_id,
+    "request_timeout_sec":request_timeout_sec,
+    }
+   return source_credentials
+
+
+def github_credentials(repo=None,access_token=None,creator=None,include_prs=False):
+   source_credentials = {
+    "repo":repo,
+    "access_token":access_token,
+    "creator":creator,
+    "include_prs":include_prs,
+    }
+   return source_credentials
+
+
+
+def azureblobstorage_credentials(conn_str=None,container=None,blob_name=None):
+   source_credentials = {
+    "conn_str":conn_str,
+    "container":container,
+    "blob_name":blob_name,
+    }
+   return source_credentials
+
+
+def azureblobcontainer_credentials(conn_str=None,container=None):
+   source_credentials = {
+    "conn_str":conn_str,
+    "container":container,
+    }
+   return source_credentials
+
+
+def snowflake_credentials(query=None,user=None,password=None,account=None,warehouse=None,role=None,database=None,schema=None):
+   source_credentials = {
+    "query":query,
+    "user":user,
+    "password":password,
+    "account":account,
+    "warehouse":warehouse,
+    "role":role,
+    "database":database,
+    "schema":schema
+
+    }
+   return source_credentials
+   
+   
+   
+
+
+
+###### target function .......
+def pinecone_credentials(openai_api_key=None,api_key=None,environment=None,index_name=None):
+   target_credentials ={
+    'openai_api_key':openai_api_key,
+    'api_key':api_key,
+    'environment':environment,
+    "index_name":index_name
+    }
+   return target_credentials
+
+
+
+def qdrant_credentials(openai_api_key=None,api_key=None,url=None,collection_name=None,prefer_grpc=None):
+   target_credentials ={
+    'openai_api_key':openai_api_key,
+    'api_key':api_key,
+    'url':url,
+    "collection_name":collection_name,
+    "prefer_grpc":prefer_grpc
+    }
+   return target_credentials
+
+
+def weaviatdb_credentials(openai_api_key=None,weaviate_url=None,weaviate_api_key=None):
+   target_credentials = {
+    'openai_api_key':openai_api_key,
+    'WEAVIATE_API_KEY':weaviate_api_key,
+    'WEAVIATE_URL':weaviate_url,
+    }
+   return target_credentials
+
+
+
+def elasticsearch_credentials(openai_api_key=None,es_url=None,index_name=None):
+   target_credentials = {
+    'openai_api_key':openai_api_key,
+    'es_url':es_url,
+    'index_name':index_name,
+    }
+   return target_credentials
+
+
+def singlestoredb_credentials(openai_api_key=None,singlestoredb_url=None,table_name=None):
+   target_credentials = {
+    'openai_api_key':openai_api_key,
+    'SINGLESTOREDB_URL':singlestoredb_url,
+    'table_name':table_name,
+    }
+   return target_credentials

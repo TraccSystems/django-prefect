@@ -69,7 +69,7 @@ input[type=submit]:hover{
 
 .wrapper-container .navbar{
     width: 15%;
-    height: 60rem;
+    height: 120vh;
    background-color: rgb(3, 36, 36);
    text-align: center;
 }
@@ -125,7 +125,8 @@ input[type=submit]:hover{
 
 .wrapper-container .page-content{
     padding: 10px 20px;
-    width: 80%;  
+    width: 100vw;  
+    
 }
 
 .connections-form-container{
@@ -172,17 +173,9 @@ input[type=submit]:hover{
     border-radius: 4px;
 }
 
-.my-connection{
-    width: 60%;
-    margin: auto;
-   
-}
 
 
 
-.formtabs{
-    display: none;
-}
 
 .connections_details{
     padding: 10px 20px;
@@ -204,15 +197,69 @@ input[type=submit]:hover{
     width: 300px;
 }
 
-.close_btn{
-    float: right;
-    padding: 5px 10px;
-    outline: none;
-    cursor: pointer;
-    margin-top: 10px;
-}
 
-#id_source,#id_target{
+
+#id_source,#id_target,#id_schedule_time,#id_time_zone{
     margin:10px;
     width: 250px;
 }
+
+.flow-forms-container{
+    margin: auto;
+    width: 70vw;
+    padding: 10px;
+    margin-top: 30px;
+}
+.integraton-container{
+    margin: auto;
+    padding: 10px;
+    margin-top: 30px;
+   
+}
+
+.integraton-container a {
+    text-decoration: none;
+    color: black;
+   
+}
+
+.target-container{
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    padding: 10px;
+    gap: 20px;
+}
+
+.source-container{
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    padding: 10px;
+    gap: 20px;
+}
+
+.grid-item {
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    padding: 10px;
+    font-size: 30px;
+    text-align: center;
+    cursor: pointer;
+  }
+
+.grid-item span{
+    font-size: 15px;
+}
+
+.source-container img{
+    width:100px;
+    height: 100px;
+    cursor: pointer;
+
+}
+
+.target-container img{
+    width:100px;
+    height: 100px;
+    cursor: pointer;
+}
+

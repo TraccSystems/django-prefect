@@ -27,42 +27,48 @@
     <div class="page-content">
         <div class="flow-forms-container">
 
-            <form action="{% url 'flow' %}" method="post">
+            <form action="{% url 'pinecone' %}" method="post">
                 {% csrf_token %}
             <div class="connection_forms">
                 {{form.non_field_errors }}
 
                 <div class="fieldWrapper">
 
-                    <label for="{{ s3form.source.id_for_label }}">Source</label>
-                    <br>
-                    {{ form.source }}
+                    <label for="{{ form.connection_name.id_for_label }}">Connection Name</label>
                     <br>
 
-                    <label for="{{ form.target.id_for_label }}">Target</label>
-                    <br>
-                    {{ form.target }}
+                    {{ form.connection_name}}
                     <br>
 
+                    <br>
+                    <label for="{{ form.api_key.id_for_label }}">Api key</label>
+                    <br>
+                    {{ form.api_key }}
+                    <br>
+
+
+                
+    
                    
                 </div>
 
 
                 <div class="fieldWrapper">
+                    
+                    <label for="{{ form.index_name.id_for_label }}">Index name</label>
+                    <br>
+                    {{ form.index_name }}
+                    <br>
 
-                    <label for="{{form.schedule_time.id_for_label }}">Schedule:</label>
+                    <label for="{{form.environment.id_for_label }}">Environment:</label>
                     <br>
-                    {{form.schedule_time }}
+                    {{form.environment}}
                     <br>
-                
-                    <label for="{{form.time_zone.id_for_label }}">TimeZone:</label>
-                    <br>
-                    {{form.time_zone }}
-                    <br>
+                   
                 </div>
 
                 </div>
-                <input type="submit" value="Create Flow">
+                <input type="submit" value="Save">
             </form>
 
 

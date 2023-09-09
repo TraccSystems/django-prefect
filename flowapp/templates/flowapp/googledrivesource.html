@@ -27,42 +27,41 @@
     <div class="page-content">
         <div class="flow-forms-container">
 
-            <form action="{% url 'flow' %}" method="post">
+            <form action="{% url 'googledrive' %}" method="post">
                 {% csrf_token %}
             <div class="connection_forms">
                 {{form.non_field_errors }}
 
                 <div class="fieldWrapper">
 
-                    <label for="{{ s3form.source.id_for_label }}">Source</label>
-                    <br>
-                    {{ form.source }}
+                    <label for="{{ form.connection_name.id_for_label }}">Connection Name</label>
                     <br>
 
-                    <label for="{{ form.target.id_for_label }}">Target</label>
+                    {{ form.connection_name}}
                     <br>
-                    {{ form.target }}
+                    <label for="{{ form.folder_id.id_for_label }}">FolderID</label>
                     <br>
-
+                    {{ form.folder_id }}
+                    <br>
                    
                 </div>
 
 
                 <div class="fieldWrapper">
 
-                    <label for="{{form.schedule_time.id_for_label }}">Schedule:</label>
+                    <label for="{{form.file_types.id_for_label }}">File Types:</label>
                     <br>
-                    {{form.schedule_time }}
+                    {{form.file_types}}
                     <br>
                 
-                    <label for="{{form.time_zone.id_for_label }}">TimeZone:</label>
+                    <label for="{{form.recursive.id_for_label }}">recursive:</label>
                     <br>
-                    {{form.time_zone }}
+                    {{form.recursive }}
                     <br>
                 </div>
 
                 </div>
-                <input type="submit" value="Create Flow">
+                <input type="submit" value="Save">
             </form>
 
 

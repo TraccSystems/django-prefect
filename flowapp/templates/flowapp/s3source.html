@@ -27,42 +27,53 @@
     <div class="page-content">
         <div class="flow-forms-container">
 
-            <form action="{% url 'flow' %}" method="post">
+            <form action="{% url 'aws' %}" method="post">
                 {% csrf_token %}
             <div class="connection_forms">
                 {{form.non_field_errors }}
 
                 <div class="fieldWrapper">
 
-                    <label for="{{ s3form.source.id_for_label }}">Source</label>
-                    <br>
-                    {{ form.source }}
+                    <label for="{{ form.connection_name.id_for_label }}">Connection Name</label>
                     <br>
 
-                    <label for="{{ form.target.id_for_label }}">Target</label>
+                    {{ form.connection_name}}
                     <br>
-                    {{ form.target }}
+                    <label for="{{ form.aws_access_key_id.id_for_label }}">Aws accesskey id</label>
+                    <br>
+                    {{ form.aws_access_key_id }}
                     <br>
 
+                    <br>
+                    <label for="{{ form.key.id_for_label }}">key</label>
+                    <br>
+                    {{ form.key }}
+                    <br>
+
+                    <br>
+                    <label for="{{ form.aws_secret_access_key.id_for_label }}">Aws secret accesskey</label>
+                    <br>
+                    {{ form.aws_secret_access_key }}
+                    <br>
                    
                 </div>
 
 
                 <div class="fieldWrapper">
 
-                    <label for="{{form.schedule_time.id_for_label }}">Schedule:</label>
+                    <label for="{{form.bucket_name.id_for_label }}">Bucket name:</label>
                     <br>
-                    {{form.schedule_time }}
+                    {{form.bucket_name}}
                     <br>
-                
-                    <label for="{{form.time_zone.id_for_label }}">TimeZone:</label>
+                    <label for="{{ form.file_type.id_for_label }}">File type</label>
                     <br>
-                    {{form.time_zone }}
+                    {{ form.file_type }}
                     <br>
+                   
                 </div>
 
                 </div>
-                <input type="submit" value="Create Flow">
+                <input type="submit" value="Save">
             </form>
 
 

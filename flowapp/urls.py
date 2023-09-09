@@ -1,11 +1,23 @@
 from django.urls import path,include
 from django.contrib.auth import views as auth_views
-from . import views
+from .views import *
 
 urlpatterns = [
-    path('profile/',views.profile,name='profile'),
-    path('flow/',views.flows,name='flow'),
+    path('profile/integration/',profile,name='profile'),
+    path('pipline/',flows,name='flow'),
+    path('googledrive/source/',google_drive_source_view,name='googledrive'),
+    path('azurecontainter/source/',azure_container_source_view,name='azurecontainer'),
+    path('azurestorage/source/',azure_storage_source_view,name='azurestorage'),
+    path('github/source/',github_source_view,name='github'),
+    path('notion/source/',notion_source_view,name='notion'),
+    path('snowflake/source/',snowflake_source_view,name='snowflake'),
+    path('aws/source/',asw_source_view,name='aws'),
+    path('pinecone/target/', pinecone_target_view,name='pinecone'),
+    path('weaviatdb/target/', weaviatdb_target_view,name='weaviatdb'),
+    path('singlestoredb/target/', singlestoredb_target_view,name='singlestoredb'),
+    path('elasticsearch/target/', elasticsearch_target_view,name='elasticsearch'),
+    path('qdrant/target/', qdrant_target_view,name='qdrant'),
     path('login/',auth_views.LoginView.as_view(template_name='flowapp/login.html'),name='login'),
-    path('flow/<str:connection_name>/edit',views.connection_edit,name='connection-edit'),
-    path('flow/<str:connection_name>/delete',views.connection_delete,name='connection-delete'),
+    path('flow/<str:connection_name>/edit',connection_edit,name='connection-edit'),
+    path('flow/<str:connection_name>/delete',connection_delete,name='connection-delete'),
 ]

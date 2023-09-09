@@ -27,21 +27,23 @@
     <div class="page-content">
         <div class="flow-forms-container">
 
-            <form action="{% url 'flow' %}" method="post">
+            <form action="{% url 'qdrant' %}" method="post">
                 {% csrf_token %}
             <div class="connection_forms">
                 {{form.non_field_errors }}
 
                 <div class="fieldWrapper">
 
-                    <label for="{{ s3form.source.id_for_label }}">Source</label>
-                    <br>
-                    {{ form.source }}
+                    <label for="{{ form.connection_name.id_for_label }}">Connection Name</label>
                     <br>
 
-                    <label for="{{ form.target.id_for_label }}">Target</label>
+                    {{ form.connection_name}}
                     <br>
-                    {{ form.target }}
+
+                    <br>
+                    <label for="{{ form.path.id_for_label }}">Path</label>
+                    <br>
+                    {{ form.path }}
                     <br>
 
                    
@@ -50,19 +52,17 @@
 
                 <div class="fieldWrapper">
 
-                    <label for="{{form.schedule_time.id_for_label }}">Schedule:</label>
+                    <label for="{{form.collection_name.id_for_label }}">Collection name:</label>
                     <br>
-                    {{form.schedule_time }}
+                    {{form.collection_name}}
                     <br>
+
                 
-                    <label for="{{form.time_zone.id_for_label }}">TimeZone:</label>
-                    <br>
-                    {{form.time_zone }}
-                    <br>
+                   
                 </div>
 
                 </div>
-                <input type="submit" value="Create Flow">
+                <input type="submit" value="Save">
             </form>
 
 

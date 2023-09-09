@@ -380,7 +380,7 @@ if __name__ == "__main__":
     deployment = Deployment.build_from_flow(
     flow = pull_data_from_source_to_target,   
     name="traccflows",
-    work_pool_name ="useflow-pool",
+    work_pool_name ="tracc-pool",
     version="1",
     tags=["pincone"],
     storage=storage,

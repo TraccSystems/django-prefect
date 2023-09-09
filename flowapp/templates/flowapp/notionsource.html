@@ -27,42 +27,48 @@
     <div class="page-content">
         <div class="flow-forms-container">
 
-            <form action="{% url 'flow' %}" method="post">
+            <form action="{% url 'notion' %}" method="post">
                 {% csrf_token %}
             <div class="connection_forms">
                 {{form.non_field_errors }}
 
                 <div class="fieldWrapper">
 
-                    <label for="{{ s3form.source.id_for_label }}">Source</label>
-                    <br>
-                    {{ form.source }}
+                    <label for="{{ form.connection_name.id_for_label }}">Connection Name</label>
                     <br>
 
-                    <label for="{{ form.target.id_for_label }}">Target</label>
+                    {{ form.connection_name}}
                     <br>
-                    {{ form.target }}
+                    <label for="{{ form.integration_token.id_for_label }}">Integration token</label>
                     <br>
+                    {{ form.integration_token }}
+                    <br>
+
+
+
+                    
 
                    
                 </div>
 
 
                 <div class="fieldWrapper">
+                    
+                    <label for="{{ form.database_id.id_for_label }}">Database ID</label>
+                    <br>
+                    {{ form.database_id }}
+                    <br>
 
-                    <label for="{{form.schedule_time.id_for_label }}">Schedule:</label>
+                    <label for="{{form.request_timeout_sec.id_for_label }}">Request timeout sec:</label>
                     <br>
-                    {{form.schedule_time }}
+                    {{form.request_timeout_sec }}
                     <br>
-                
-                    <label for="{{form.time_zone.id_for_label }}">TimeZone:</label>
-                    <br>
-                    {{form.time_zone }}
-                    <br>
+                    
+                   
                 </div>
 
                 </div>
-                <input type="submit" value="Create Flow">
+                <input type="submit" value="Save">
             </form>
 
 

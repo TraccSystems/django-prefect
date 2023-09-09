@@ -3,20 +3,63 @@ from django.conf import settings
 from django.db.models.signals import post_save
 from .models import UserProfile
 from . models import UserProfile
-from . flow_generatore import generate_flow
+from . flow_generatore import (
+    generate_flow,
+    ## source credentials func
+    s3_credentials,
+    snowflake_credentials,
+    notion_credentials,
+    azureblobcontainer_credentials,
+    azureblobstorage_credentials,
+    github_credentials,
+    googledrive_credentials,
+    ## target credentials func
+    pinecone_credentials,
+    weaviatdb_credentials,
+    singlestoredb_credentials,
+    qdrant_credentials,
+    elasticsearch_credentials
+    
+
+
+    )
 from . forms import (
-                     PostgressConnectionForm,
-                     PineconeConnectionForm,
-                     SingleStoreDBConnectionsForm,
-                     S3ConnectionForm,
-                     FlowsForm,
-                     )
-from . models import (Pinecone_connection,
-                      S3_connections_aws,
-                      Postgress_connections,
-                      SingleStoreDB_connections,
-                      Flows
-                      )
+    S3ConnectionForm,
+    AzureblobContainerForm,
+    AzureblobStorageForm,
+    PineconeConnectionForm,
+    PostgressConnectionForm,
+    SingleStoreDBConnectionsForm,
+    NotionSourceForm,
+    SnowFlakeSourceForm,
+    ElasticSearchTargetForm,
+    QdrantTargetForm,
+    WeaviatTargetForm,
+    GitHubSourceForm,
+    GoogleDriveSourceForm,
+    FlowsForm
+
+
+
+)
+from . models import (
+    ## source
+    S3_connections_aws,
+    S3_connections_digital_ocean,
+    Snowflake_connection,
+    AzureblobStorage_connection,
+    AzureblobContainer_connection,
+    Notion_connection,
+    Postgress_connections,
+    Github_connection,
+    GoogleDrive_connection,
+    ##target,
+    Pinecone_connection,
+    Qdrant_connection,
+    SingleStoreDB_connections,
+    Weaviatdb_connection,
+    Elasticsearch_connection
+)
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -97,49 +140,261 @@ def connection_delete(request,connection_name):
 def flows(request):
     ## get owner details......................
     owner = get_object_or_404(UserProfile,user=request.user)
-    s3 = S3_connections_aws.objects.filter(owner=owner).first()
-    pinecone = Pinecone_connection.objects.filter(owner=owner).first()
-    singleStore = SingleStoreDB_connections.objects.filter(owner=owner).first()
     if request.method =="POST":
-        
-        form = FlowsForm(owner,request.POST)
+        form = FlowsForm(request.POST)
         if form.is_valid():
-            scheduel_time = form.cleaned_data['scheduel_time']
+            schedule_time = form.cleaned_data['schedule_time']
             time_zone = form.cleaned_data['time_zone']
             source = form.cleaned_data['source']
             target = form.cleaned_data['target']
-            #get connection details
-            s3_connections = S3_connections_aws.objects.get(connection_name=source)
-            pinecone_connections = Pinecone_connection.objects.get(connection_name=target)
 
-            
-            
-            
-            ## created and deploy flows to prefect cloud
+            if source == "S3" and target =="Pinecone":
+                 aws_source = S3_connections_aws.objects.filter(source_name=source,owner=owner).first()
+                 pinecone_target = Pinecone_connection.objects.filter(target_name=target,owner=owner).first()
 
-            s3_to_pincone_flow(owner,
-                               s3_connections.aws_access_key_id,
-                               s3_connections.aws_secret_access_key,
-                               s3_connections.key,
-                               s3_connections.bucket_name,
-                               s3_connections.file_type,
-                               pinecone_connections.index_name,
-                               pinecone_connections.environment,
-                              pinecone_connections.api_key,
-                              time_zone=time_zone,
-                              scheduel_time=scheduel_time
+                 source_credentials = s3_credentials(
+                     aws_access_key=aws_source.aws_access_key_id,
+                     aws_secret_access_key=aws_source.aws_secret_access_key,
+                     bucket_name=aws_source.bucket_name,
+                     prefix=aws_source.key,
+                     file_type=aws_source.file_type
+                     )
+                 target_credentials = pinecone_credentials(openai_api_key='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',
+                                                           api_key=pinecone_target.api_key,
+                                                           environment=pinecone_target.environment,
+                                                           index_name=pinecone_target.index_name
+                                                           )
+                 
+                 #generate flow
+                 generate_flow(user=owner,
+                               source=source,
+                               target=target,
+                               source_credentials=source_credentials,
+                               target_credentials=target_credentials,
+                               scheduel_time=schedule_time,
+                               time_zone=time_zone
                                )
 
+
+                 
+
+
+
+
+            
+
            
-            return HttpResponseRedirect('/flows/flow/')
+            
+            ## created and deploy flows to prefect cloud
+           
+            return HttpResponseRedirect('/flows/pipline/')
         
         
 
 
     else:
-        form = FlowsForm(owner=owner)
+        form = FlowsForm()
        
-    return render(request,'flowapp/flow.html',{'s3form':form})
+    return render(request,'flowapp/flow.html',{'form':form})
+
+
+
+
+ ## source view
+def google_drive_source_view(request):
+    owner = get_object_or_404(UserProfile,user=request.user)
+    if request.method == "POST":
+        form = GoogleDriveSourceForm(request.POST)
+        print(request.POST)
+        if form.is_valid():
+
+            instance = form.save(commit=False)
+            instance.owner = owner
+            instance.save()
+            return HttpResponseRedirect('/flows/profile/integration/')
+    else:
+         form = GoogleDriveSourceForm()
+    return render(request,'flowapp/googledrivesource.html',{'form':form})
+
+
+
+
+def azure_container_source_view(request):
+    owner = get_object_or_404(UserProfile,user=request.user)
+    if request.method == "POST":
+
+        form = AzureblobContainerForm(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.owner = owner
+            instance.save()
+            return HttpResponseRedirect('/flows/profile/integration/')
+    else:
+         
+         form = AzureblobContainerForm()
+    return render(request,'flowapp/Azurecontainer.html',{'form':form})
+
+def azure_storage_source_view(request):
+    owner = get_object_or_404(UserProfile,user=request.user)
+    if request.method == "POST":
+        form =AzureblobStorageForm(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.owner = owner
+            instance.save()
+            return HttpResponseRedirect('/flows/profile/integration/')
+    else:
+         form = AzureblobStorageForm()
+    return render(request,'flowapp/AzureStorage.html',{'form':form})
+
+
+def github_source_view(request):
+    owner = get_object_or_404(UserProfile,user=request.user)
+    if request.method == "POST":
+        form = GitHubSourceForm(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.owner = owner
+            instance.save()
+            return HttpResponseRedirect('/flows/profile/integration/')
+    else:
+         form = GitHubSourceForm()
+    return render(request,'flowapp/githubsource.html',{'form':form})
+
+
+
+
+def notion_source_view(request):
+    owner = get_object_or_404(UserProfile,user=request.user)
+    if request.method == "POST":
+        form = NotionSourceForm(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.owner = owner
+            instance.save()
+            return HttpResponseRedirect('/flows/profile/integration/')
+    else:
+         form = NotionSourceForm()
+    return render(request,'flowapp/notionsource.html',{'form':form})
+
+
+def snowflake_source_view(request):
+   owner = get_object_or_404(UserProfile,user=request.user)
+   if request.method == "POST":
+        form = SnowFlakeSourceForm(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.owner = owner
+            instance.save()
+            return HttpResponseRedirect('/flows/profile/integration/')
+   else:
+         form = SnowFlakeSourceForm()
+   return render(request,'flowapp/snowflakesource.html',{'form':form})
+
+
+def asw_source_view(request):
+   owner = get_object_or_404(UserProfile,user=request.user)
+   if request.method == "POST":
+        print(request.POST)
+        form = S3ConnectionForm(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.owner = owner
+            instance.save()
+            return HttpResponseRedirect('/flows/profile/integration/')
+   else:
+         form = S3ConnectionForm()
+   return render(request,'flowapp/s3source.html',{'form':form})
+
+
+
+
+## target views
+
+
+def pinecone_target_view(request):
+
+    owner = get_object_or_404(UserProfile,user=request.user)
+    if request.method == "POST":
+        form = PineconeConnectionForm(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.owner = owner
+            instance.save()
+            return HttpResponseRedirect('/flows/profile/integration/')
+    else:
+         form =  PineconeConnectionForm()
+    
+    return render(request,'flowapp/pineconetarget.html',{'form':form})
+
+
+def weaviatdb_target_view(request):
+     
+     owner = get_object_or_404(UserProfile,user=request.user)
+     if request.method == "POST":
+        form = WeaviatTargetForm(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.owner = owner
+            instance.save()
+            return HttpResponseRedirect('/flows/profile/integration/')
+     else:
+         form =  WeaviatTargetForm()
+    
+     return render(request,'flowapp/weaviateTarget.html',{'form':form})
+
+
+def singlestoredb_target_view(request):
+   
+   owner = get_object_or_404(UserProfile,user=request.user)
+   if request.method == "POST":
+        form = SingleStoreDBConnectionsForm(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.owner = owner
+            instance.save()
+            return HttpResponseRedirect('/flows/profile/integration/')
+   else:
+         form =  SingleStoreDBConnectionsForm()
+    
+   return render(request,'flowapp/singlestoreTarget.html',{'form':form})
+
+
+def elasticsearch_target_view(request):
+     
+     owner = get_object_or_404(UserProfile,user=request.user)
+     if request.method == "POST":
+        form = ElasticSearchTargetForm(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.owner = owner
+            instance.save()
+            return HttpResponseRedirect('/flows/profile/integration/')
+     else:
+         form =  ElasticSearchTargetForm()
+    
+     return render(request,'flowapp/elasticsearchTarget.html',{'form':form})
+
+
+
+def qdrant_target_view(request):
+     owner = get_object_or_404(UserProfile,user=request.user)
+     if request.method == "POST":
+        form = QdrantTargetForm(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.owner = owner
+            instance.save()
+            return HttpResponseRedirect('/flows/profile/integration/')
+     else:
+         form =  QdrantTargetForm()
+    
+     return render(request,'flowapp/qdrantTarget.html',{'form':form})
+    
+
+
+
+
 
 
 

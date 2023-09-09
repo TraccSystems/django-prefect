@@ -145,6 +145,7 @@ class GoogleDrive_connection(models.Model):
     file_types= models.CharField(max_length=100)
     recursive = models.BooleanField(default=False)
     owner = models.ForeignKey(UserProfile,on_delete=models.CASCADE)
+    
    
     def __str__(self) -> str:
          return self.source_name
@@ -202,6 +203,22 @@ class AzureblobContainer_connection(models.Model):
 
      def __str__(self) -> str:
          return self.source_name
+     
+
+
+class Notion_connection(models.Model):
+     connection_name = models.CharField(max_length=255)
+     source_name = models.CharField(max_length=255,default='Notion')
+     integration_token = models.CharField(max_length=255)
+     database_id = models.CharField(max_length=255)
+     request_timeout_sec = models.CharField(max_length=10)
+     owner = models.ForeignKey(UserProfile,on_delete=models.CASCADE)
+ 
+     def __str__(self) -> str:
+         return self.source_name
+
+     
+
     
     
 
@@ -233,7 +250,6 @@ class SingleStoreDB_connections(models.Model):
     table_name = models.CharField(max_length=255,default='scrap_data')
     created_at = models.DateField(auto_now=True)
     singledb_url = models.CharField(max_length=255)
-    created_at = models.DateField(auto_now=True)
     owner = models.ForeignKey(UserProfile,on_delete=models.CASCADE)
 
     def __str__(self) -> str:
@@ -322,14 +338,14 @@ class Flows(models.Model):
     target = models.CharField(max_length=255,choices=TARGET_CHOICE)
     time_zone_choices.sort(key=lambda x: x[0])
     owner = models.ForeignKey(UserProfile,on_delete=models.CASCADE)
-    scheduel_time = models.DateTimeField()
+    schedule_time = models.DateTimeField()
     time_zone = models.CharField(max_length=255,choices=time_zone_choices)
 
     def __str__(self) -> str:
         return self.target
 
     class Meta:
-        ordering = ['scheduel_time']
+        ordering = ['schedule_time']
 
 
 

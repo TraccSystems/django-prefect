@@ -27,42 +27,51 @@
     <div class="page-content">
         <div class="flow-forms-container">
 
-            <form action="{% url 'flow' %}" method="post">
+            <form action="{% url 'elasticsearch' %}" method="post">
                 {% csrf_token %}
             <div class="connection_forms">
                 {{form.non_field_errors }}
 
                 <div class="fieldWrapper">
 
-                    <label for="{{ s3form.source.id_for_label }}">Source</label>
-                    <br>
-                    {{ form.source }}
+                    <label for="{{ form.connection_name.id_for_label }}">Connection Name</label>
                     <br>
 
-                    <label for="{{ form.target.id_for_label }}">Target</label>
+                    {{ form.connection_name}}
                     <br>
-                    {{ form.target }}
+                    <label for="{{ form.index_name.id_for_label }}">Index name</label>
+                    <br>
+                    {{ form.index_name }}
                     <br>
 
+                    <br>
+                    <label for="{{ form.es_url.id_for_label }}">Es url</label>
+                    <br>
+                    {{ form.es_url }}
+                    <br>
+
+    
                    
                 </div>
 
 
                 <div class="fieldWrapper">
 
-                    <label for="{{form.schedule_time.id_for_label }}">Schedule:</label>
+                    <label for="{{form.es_user.id_for_label }}">Es user:</label>
                     <br>
-                    {{form.schedule_time }}
+                    {{form.es_user}}
                     <br>
-                
-                    <label for="{{form.time_zone.id_for_label }}">TimeZone:</label>
+                    <label for="{{ form.es_password.id_for_label }}">Es password</label>
                     <br>
-                    {{form.time_zone }}
+                    {{ form.es_password }}
                     <br>
+
+                   
+                   
                 </div>
 
                 </div>
-                <input type="submit" value="Create Flow">
+                <input type="submit" value="Save">
             </form>
 
 

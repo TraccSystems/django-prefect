@@ -16,306 +16,117 @@
 
    <!--navbar-->
     <div class="navbar">
-        <li><a href="{% url 'profile' %}">Connections</a></li>
-        <li><a href="{% url 'flow' %}">Flows</a></li>
+        <li><a href="{% url 'profile' %}">Integrations</a></li>
+        <li><a href="{% url 'flow' %}">Create Flows piplines</a></li>
+        <li><a href="{% url 'flow' %}">Flows piplines</a></li>
        
     </div>
      <!--navbar-->
 
     <!--page-content-->
     <div class="page-content">
-        <button class="connection_btn"> Add new Conections</button>
+        <div class="integraton-container">
 
-
-         <div class="my-connection">
-            
-            <p>My Connection</p>
-            {% if s3connections %}
-            {% for s3connection in s3connections %}
-            <div class="connections_details">
-                <span>S3</span> 
-                <br>
-                <span>bucket_name:{{s3connection.bucket_name}}</span> <span>key: {{s3connection.key}}</span> <span>Type: {{s3connection.s3_connection_type}}</span>
+        <div class="source-container">
+        <a href="{% url 'googledrive' %}">
+            <div class="grid-item">
+                <img src="{% static 'sourceimages/googledrive.png' %}">
+                <p>GoogleDrive</p>
+                <span>source</span>
             </div>
-              
-            {% endfor %}
-              
-            {% endif %}
+        </a>
 
-            {% if pgres_connection %}
-            {% for pgres_connections in pgres_connection %}
-            <div class="connections_details">
-                <span>Postgress</span> 
-                <br>
-                <span>Database:{{pgres_connections.database_name}}</span> <span>username: {{pgres_connections.username}}</span> <span>Type: {{pgres_connections.post_connection_type}}</span>
+        <a href="{% url 'azurecontainer' %}">
+            <div class="grid-item">
+                <img src="{% static 'sourceimages/azure-table.1339262.59199e16fb566cb6d7c1d1b7155b66f6.png' %}">
+                <p>AzureContainer</p>
+                <span>source</span>
             </div>
-              
-            {% endfor %}
-              
-            {% endif %}
-
-            {% if pincone_connections %}
-            {% for pincone_connection in pincone_connections %}
-            <div class="connections_details">
-                <span>Pincone</span> 
-                <br>
-                <span>Database:{{pincone_connection.index_name}}</span> <span>enviroment: {{pincone_connection.environment}}</span> <span>Type: {{pincone_connection.pincon_connection_types}}</span>
+        </a>
+       
+       <a href="{% url 'azurestorage' %}">
+            <div class="grid-item">
+                <img src="{% static 'sourceimages/azure-table.1339262.59199e16fb566cb6d7c1d1b7155b66f6.png' %}">
+                <p>AzureStorage</p>
+                <span>source</span>
             </div>
-              
-            {% endfor %}
-              
-            {% endif %}
+        </a>
 
-            {% if singlestore_connections %}
-            {% for singlestore_connection in singlestore_connections %}
-            <div class="connections_details">
-                <span>SingleStore</span> 
-                <br>
-                <span>singledb_url:{{singlestore_connection.singledb_url}}</span>  <span>Type: {{singlestore_connection.single_connection_types}}</span>
+        <a href="{% url 'github' %}">
+            <div class="grid-item">
+                <img src="{% static 'sourceimages/github.16aa737.ef7a02b69836dc8b6a732a54c4200dcb.png' %}">
+                <p>GitHub</p>
+                <span>source</span>
             </div>
-              
-            {% endfor %}
-              
-            {% endif %}
-            
-         </div>
-
-         
-
-
-        <!--form-container-->
-        <div class="connections-form-container">
-            <div class="form-title">
-                <button class="close_btn">X</button>
-                <p> Add Connections</p>
-                
-            </div>
-            
-            <!--connection selection-->
-        <div class="connection_selection">
-            <select class="connections" name="connections">
-                <option >Select connections</option>
-                <option value="S3">S3</option>
-                <option value="Postgress">Postgress</option>
-                <option value="Pinecone">Pinecone</option>
-                <option value="SingleStore">SingleStore</option>
-            </select>
-        </div>
-            <!--connection selection-->
-
-<!--s3form-->
-        <div class="formtabs">
-            <form action="{% url 'profile' %}" method="post">
-                {% csrf_token %}
-            <div class="connection_forms">
-                {{s3form.non_field_errors }}
-
-                <div class="fieldWrapper">
-                    <label for="{{ s3form.connection_name.id_for_label }}">Connection Name</label>
-                    <br>
-                    {{ s3form.connection_name }}
-                    <br>
-
-                    <label for="{{ s3form.aws_access_key_id.id_for_label }}">Aws accesskey id</label>
-                    <br>
-                    {{ s3form.aws_access_key_id }}
-                    <br>
-
-                    
-
-                    <label for="{{ s3form.key.id_for_label }}">object key</label>
-                    <br/>
-                    {{ s3form.key}}
-
-                </div>
-
-
-                <div class="fieldWrapper">
-                    <label for="{{s3form.aws_secret_access_key.id_for_label }}">Aws secret access key:</label>
-                    {{s3form.aws_secret_access_key }}
-
-                    <label for="{{s3form.bucket_name.id_for_label }}">Bucket name:</label>
-                    <br>
-                    {{s3form.bucket_name }}
-                    <br>
-
-                    <label for="{{s3form.file_type.id_for_label }}">file_type:</label>
-                    <br>
-            
-                    {{s3form.file_type}}
-                    <br>
-
-                    <label for="{{s3form.s3_connection_type.id_for_label }}">Connection type:</label>
-                    <br/>
-                    <br/>
-                    {{s3form.s3_connection_type}}
-                </div>
-
-                </div>
-                <input type="submit" value="save">
-            </form>
-            </div>
-        <!--s3form-->
-
-
-                <!--Postgressform-->
-                <div class="formtabs">
-                    <form action="{% url 'profile' %}" method="post">
-                        {% csrf_token %}
-                <div class="connection_forms">
-
-                    {{postgresform.non_field_errors }}
-    
-                    <div class="fieldWrapper">
-
-                        <label for="{{postgresform.connection_name.id_for_label }}">Connection name</label>
-                        <br>
-                        {{postgresform.connection_name}}
-                        <br>
-                       
-                        <label for="{{postgresform.database_name.id_for_label }}">Database name</label>
-                        <br>
-                        {{postgresform.database_name}}
-                        <br>
-    
-                        <label for="{{ postgresform.host.id_for_label }}"> Host</label>
-                        <br/>
-                        {{ postgresform.host }}
-                        <br>
-                        <label for="{{ postgresform.username.id_for_label }}"> Username</label>
-                        <br>
-                        {{ postgresform.username }}
-                    </div>
-    
-                    <div class="fieldWrapper">
-                        <label for="{{postgresform.password.id_for_label }}">Password:</label>
-                        {{postgresform.password }}
-                        <br>
-                        <label for="{{postgresform.port.id_for_label }}">port:</label>
-                        <br>
-                        {{postgresform.port}}
-                        <br>
-    
-                        <label for="{{postgresform.post_connection_type.id_for_label }}">Connection type:</label>
-                        <br/>
-                        <br/>
-                        {{postgresform.post_connection_type}}
-                    </div>
-
-                    </div>
-                     <input type="submit" value="save">
-                   </form>
-                </div>
-
-                <!--Postgressform-->
-
-
-                 <!--Pineconeform-->
-                 <div class="formtabs">
-                    <form action="{% url 'profile' %}" method="post">
-                        {% csrf_token %}
-                 <div class="connection_forms">
-                    {{pinconeform.non_field_errors }}
-    
-                    <div class="fieldWrapper">
-                        <label for="{{pinconeform.connection_name.id_for_label }}">Connection Name</label>
-                        <br>
-                        {{pinconeform.connection_name}}
-                        <br>
-
-                        <label for="{{pinconeform.api_key.id_for_label }}">Api key</label>
-                        <br>
-                        {{pinconeform.api_key}}
-                        <br>
-    
-                        <label for="{{ pinconeform.environment.id_for_label }}">Environment</label>
-                        <br/>
-                        {{ pinconeform.environment }}
-                    </div>
-    
-                    <div class="fieldWrapper">
-                        <label for="{{pinconeform.index_name.id_for_label }}">Index name:</label>
-                        {{pinconeform.index_name }}
-                        <br>
-                        <label for="{{pinconeform.connection_types.id_for_label }}">Connection type:</label>
-                        <br/>
-                        <br/>
-                        {{pinconeform.pincon_connection_types}}
-                    </div>
-
-                 </div>
-                 <input type="submit" value="save">
-                </form>
-                </div>
-                <!--Pineconeform-->
-
-
-                 <div class="formtabs">
-                 <!--SingleStoreDB-->
-                 <form action="{% url 'profile' %}" method="post">
-                    {% csrf_token %}
-                 <div class="connection_forms">
-                    {{singlestoreform.non_field_errors }}
-    
-                    <div class="fieldWrapper">
-                        <label for="{{singlestoreform.connection_name.id_for_label }}">Connectionn Name</label>
-                        <br>
-                        {{singlestoreform.connection_name}}              
-
-                        <label for="{{singlestoreform.table_name.id_for_label }}">Table name</label>
-                        <br>
-                        {{singlestoreform.table_name}}
-                
-                    </div>
-    
-                    <div class="fieldWrapper">
-                        <label for="{{singlestoreform.singledb_url.id_for_label }}">Singledb url</label>
-                        <br>
-                        {{singlestoreform.singledb_url}}
-
+        </a>
         
-                        <label for="{{singlestoreform.connection_types.id_for_label }}">Connection type:</label>
-                        <br/>
-                        <br/>
-                        {{singlestoreform.single_connection_types}}
-                    </div>
-                 </div>
-                 <input type="submit" value="save">
-                </form>
-                </div>
-
-                <!--SingleStoreDB-->
-
-
-
-
+        <a href="{% url 'notion' %}">
+            <div class="grid-item">
+                <img src="{% static 'sourceimages/notionimage.png' %}">
+                <p>Notion</p>
+                <span>source</span>
             </div>
-          
+        </a>
 
+        <a href="{% url 'snowflake' %}">
+            <div class="grid-item">
+                <img src="{% static 'sourceimages/snowflake.59ce981.0b6687d0465d6c5cc2e629bd903e696f.png' %}">
+                <p>Snowflake</p>
+                <span>source</span>
+            </div>
+        </a>
 
+        <a href="{% url 'aws' %}">
+            <div class="grid-item">
+                <img src="{% static 'sourceimages/pipelinewise-s3-csv.21b8d3c.42ff27bb410d2c243991128d456fe001.png' %}">
+                <p>Aws</p>
+                <span>source</span>
+            </div>
+        </a>
+       
+        <a href="{% url 'elasticsearch' %}">
+            <div class="grid-item">
+                <img src="{% static 'targetimages/elasticsearch.59ce981.68519aaac0ff5649bd4756df2d946cea.png' %}">
+                <p>Elasticsearch</p>
+                <span>target</span>
+            </div>
+        </a>
 
+        <a href="{% url 'pinecone' %}">
+            <div class="grid-item">
+                <img src="{% static 'targetimages/pinecone.59ce981.10ca2664f2b68d9b4b26dc79e6942be7.png' %}">
+                <p>Pincone</p>
+                <span>target</span>
+            </div>
+        </a>
 
+        <a href="{% url 'qdrant' %}">
+            <div class="grid-item">
+                <img src="{% static 'targetimages/qdrant.png' %}">
+                <p>Qdrant</p>
+                <span>target</span>
+            </div>
+        </a>
 
+        <a href="{% url 'singlestoredb' %}">
+            <div class="grid-item">
+                <img src="{% static 'targetimages/singlestoredb.jpg' %}">
+                <p>Singlestoredb</p>
+                <span>target</span>
+            </div>
+        </a>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            
+        <a href="{% url 'weaviatdb' %}">
+            <div class="grid-item">
+                <img src="{% static 'targetimages/weaviatdb.jpg' %}">
+                <p>Weaviatdb</p>
+                <span>target</span>
+            </div>
+        </a>
         </div>
-         <!--form-container-->
-    </div>
+   
+
+</div>
     <!--page-content-->
    
 </div>
