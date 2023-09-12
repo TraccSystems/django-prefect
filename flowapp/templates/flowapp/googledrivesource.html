@@ -16,10 +16,11 @@
 
    <!--navbar-->
     <div class="navbar">
-        <li><a href="{% url 'profile' %}">Integrations</a></li>
-        <li><a href="{% url 'flow' %}">Create Flows piplines</a></li>
+        <li><a href="{% url 'integretion' %}">Integrations</a></li>
+        <li><a href="{% url 'connection' %}">Connections</a></li>
+        <li><a href="{% url 'create-pipline' %}">Create piplines</a></li>
         <li><a href="{% url 'flow' %}">Flows piplines</a></li>
-       
+        <li><a href="{% url 'deployment' %}">Deployments</a></li>
     </div>
      <!--navbar-->
 
@@ -36,12 +37,29 @@
 
                     <label for="{{ form.connection_name.id_for_label }}">Connection Name</label>
                     <br>
-
                     {{ form.connection_name}}
+
                     <br>
                     <label for="{{ form.folder_id.id_for_label }}">FolderID</label>
                     <br>
                     {{ form.folder_id }}
+                    <br>
+
+                     
+                    <label for="{{ form.gdrive_api_file.id_for_label }}">Gdrive api file</label>
+                    <br>
+                    {{ form.gdrive_api_file }}
+                    <br>
+
+                    <label for="{{ form.template.id_for_label }}">Template</label>
+                    <br>
+                    {{ form.template }}
+                    <br>
+
+                    
+                    <label for="{{ form.supportsAllDrives.id_for_label }}">SupportsAllDrives</label>
+                    <br>
+                    {{ form.supportsAllDrives }}
                     <br>
                    
                 </div>
@@ -52,6 +70,16 @@
                     <label for="{{form.file_types.id_for_label }}">File Types:</label>
                     <br>
                     {{form.file_types}}
+                    <br>
+
+                    <label for="{{form.query.id_for_label }}">Query:</label>
+                    <br>
+                    {{form.query}}
+                    <br>
+
+                    <label for="{{form.num_results.id_for_label }}">Num results:</label>
+                    <br>
+                    {{form.num_results}}
                     <br>
                 
                     <label for="{{form.recursive.id_for_label }}">recursive:</label>

@@ -29,43 +29,17 @@
     <div class="page-content">
         <div class="flow-forms-container">
 
-            <form action="{% url 'pinecone' %}" method="post">
+            <form action="{% url 'openai' %}" method="post">
                 {% csrf_token %}
             <div class="connection_forms">
                 {{form.non_field_errors }}
 
                 <div class="fieldWrapper">
 
-                    <label for="{{ form.connection_name.id_for_label }}">Connection Name</label>
+                    <label for="{{ form.openai_api_key.id_for_label }}">Openai api key</label>
                     <br>
 
-                    {{ form.connection_name}}
-                    <br>
-
-                    <br>
-                    <label for="{{ form.api_key.id_for_label }}">Api key</label>
-                    <br>
-                    {{ form.api_key }}
-                    <br>
-
-
-                
-    
-                   
-                </div>
-
-
-                <div class="fieldWrapper">
-                    
-                    <label for="{{ form.index_name.id_for_label }}">Index name</label>
-                    <br>
-                    {{ form.index_name }}
-                    <br>
-
-                    <label for="{{form.environment.id_for_label }}">Environment:</label>
-                    <br>
-                    {{form.environment}}
-                    <br>
+                    {{ form.openai_api_key}}
                    
                 </div>
 

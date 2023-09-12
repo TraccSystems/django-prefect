@@ -142,7 +142,13 @@ class GoogleDrive_connection(models.Model):
     connection_name = models.CharField(max_length=255)
     source_name = models.CharField(max_length=255,default='Googledrive')
     folder_id= models.CharField(max_length=255)
+    gdrive_api_file = models.CharField(max_length=255)
     file_types= models.CharField(max_length=100)
+    template = models.CharField(max_length=255)
+    query = models.CharField(max_length=255)
+    num_results = models.CharField(max_length=255,default=2)
+    supportsAllDrives = models.BooleanField(default=False)
+
     recursive = models.BooleanField(default=False)
     owner = models.ForeignKey(UserProfile,on_delete=models.CASCADE)
     
@@ -153,9 +159,10 @@ class GoogleDrive_connection(models.Model):
 class Github_connection(models.Model):
     connection_name = models.CharField(max_length=255)
     source_name = models.CharField(max_length=255,default='Github')
-    clone_url = models.CharField(max_length=255)
-    repo_path = models.CharField(max_length=255)
-    branch = models.CharField(max_length=255)
+    access_token = models.CharField(max_length=255)
+    repo= models.CharField(max_length=255)
+    creator = models.CharField(max_length=255)
+    include_prs = models.BooleanField(default=False)
     owner = models.ForeignKey(UserProfile,on_delete=models.CASCADE)
 
 
@@ -263,7 +270,9 @@ class SingleStoreDB_connections(models.Model):
 class Qdrant_connection(models.Model):
       connection_name = models.CharField(max_length=255)
       target_name = models.CharField(max_length=255,default='Qdrant')
-      path = models.CharField(max_length=255)
+      url = models.CharField(max_length=255)
+      api_key = models.CharField(max_length=255,default=None)
+      prefer_grpc = models.BooleanField(default=True)
       collection_name = models.CharField(max_length=255)
       created_at = models.DateField(auto_now=True)
       owner = models.ForeignKey(UserProfile,on_delete=models.CASCADE)
@@ -324,14 +333,14 @@ class Flows(models.Model):
                       ]
     
     SOURCES_CHOICE = [
-        ('S3digitalOcean','S3digitalOcean'),
+        ('Notion','Notion'),
         ('S3','S3'),
         ('Postgress','Postgress'),
         ('Googledrive','Googledrive'),
         ('Github','Github'),
         ('Snowflake','Snowflake'),
         ('AzureblobStorage','AzureblobStorage'),
-        ('AzureblobStorage','AzureblobStorage'),
+        ('AzureblobContainer','AzureblobContainer'),
                       ]
 
     source = models.CharField(max_length=255,choices=SOURCES_CHOICE)
@@ -339,13 +348,28 @@ class Flows(models.Model):
     time_zone_choices.sort(key=lambda x: x[0])
     owner = models.ForeignKey(UserProfile,on_delete=models.CASCADE)
     schedule_time = models.DateTimeField()
+    flow_name = models.CharField(max_length=255)
+    deployment_name = models.CharField(max_length=255,default="traccflows")
     time_zone = models.CharField(max_length=255,choices=time_zone_choices)
+    source_connection_name = models.CharField(max_length=255,default=None)
+    target_connection_name = models.CharField(max_length=255,default=None)
 
     def __str__(self) -> str:
         return self.target
 
     class Meta:
         ordering = ['schedule_time']
+
+
+
+class OpenAiEmbedding(models.Model):
+    openai_api_key = models.CharField(max_length=255,default=None)
+    connection_type = models.CharField(max_length=255,default='OpenaiApiKey')
+    owner = models.ForeignKey(UserProfile,on_delete=models.CASCADE)
+
+
+    def __str__(self) -> str:
+        return self.openai_api_key
 
 
 

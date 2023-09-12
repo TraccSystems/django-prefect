@@ -3,8 +3,12 @@ from django.contrib.auth import views as auth_views
 from .views import *
 
 urlpatterns = [
-    path('profile/integration/',profile,name='profile'),
-    path('pipline/',flows,name='flow'),
+    path('integration/',intergrations,name='integretion'),
+    path('create/pipline/',flows,name='create-pipline'),
+    path('openai/embedding/',openai_embedding_view,name="openai"),
+    path('user/connection/',user_connection,name='connection'),
+    path('deployment/',user_flow_deployment,name='deployment'),
+    path('flow/',flowpipline,name='flow'),
     path('googledrive/source/',google_drive_source_view,name='googledrive'),
     path('azurecontainter/source/',azure_container_source_view,name='azurecontainer'),
     path('azurestorage/source/',azure_storage_source_view,name='azurestorage'),

@@ -69,7 +69,7 @@ input[type=submit]:hover{
 
 .wrapper-container .navbar{
     width: 15%;
-    height: 120vh;
+    height: 160vh;
    background-color: rgb(3, 36, 36);
    text-align: center;
 }
@@ -251,15 +251,15 @@ input[type=submit]:hover{
 }
 
 .source-container img{
-    width:100px;
-    height: 100px;
+    width:80px;
+    height: 80px;
     cursor: pointer;
 
 }
 
 .target-container img{
-    width:100px;
-    height: 100px;
+    width:80px;
+    height: 80px;
     cursor: pointer;
 }
 

@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{request.user.email}}</title>
+</head>
+<link rel="stylesheet" href="{% static 'flowapp/main.css' %}">
+<script src="{% static 'flowapp/main.js' %}" defer></script>
+<body>
+
+<div class="menu-header"></div>
+
+<div class="wrapper-container">
+
+   <!--navbar-->
+    <div class="navbar">
+        <li><a href="{% url 'integretion' %}">Integrations</a></li>
+        <li><a href="{% url 'connection' %}">Connections</a></li>
+        <li><a href="{% url 'create-pipline' %}">Create piplines</a></li>
+        <li><a href="{% url 'flow' %}">Flows piplines</a></li>
+        <li><a href="{% url 'deployment' %}">Deployments</a></li>
+    </div>
+     <!--navbar-->
+
+    <!--page-content-->
+    <div class="page-content">
+      
+   
+
+</div>
+    <!--page-content-->
+   
+</div>
+    
+</body>
+</html>

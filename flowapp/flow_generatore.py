@@ -3,17 +3,19 @@ from prefect.deployments import Deployment
 from prefect_aws.s3 import S3Bucket
 from prefect.server.schemas.schedules import CronSchedule
 import datetime
+import requests
 
 
 
-def generate_flow(user=None, 
+def generate_flow(flow_name=None, 
                   source=None, 
                   target=None,
                   source_credentials=dict,
                   target_credentials=dict,
                   time_zone=None,
                   scheduel_time=None,
-                  day_or=True
+                  day_or=True,
+                  deployment_name="traccflows",
                   ):
 
     templated_code = {
@@ -222,7 +224,7 @@ documents = load_external_document(
     "Pinecone": {"function_name": "pull_data_from_source_to_target()",
                 "code": f"""
 
-@flow(name='pull_data_from_source_to_pincone',retries=2,description="pull data from source write to pincone")
+@flow(name='{flow_name}_pull_data_from_source_to_target',retries=2,description="pull data from source write to pincone")
 def pull_data_from_source_to_target():
     
     embeddings = OpenAIEmbeddings(openai_api_key="{target_credentials.get('openai_api_key')}")
@@ -251,7 +253,7 @@ def pull_data_from_source_to_target():
     "SingleStoreDB": {"function_name": "pull_data_from_source_to_target()",
                     "code": f"""
 
-@flow(name='pull_data_from_source_to_singleStore',retries=2,description="pull data from source write to singleStore")
+@flow(name='{flow_name}_pull_data_from_source_to_target',retries=2,description="pull data from source write to singleStore")
 def pull_data_from_source_to_target():
     embeddings = OpenAIEmbeddings(openai_api_key='{target_credentials.get('openai_api_key','unknown')}')
 
@@ -266,7 +268,7 @@ def pull_data_from_source_to_target():
     
     "Elasticsearch": {"function_name": "pull_data_from_source_to_target()",
                     "code": f"""
-@flow(name='pull_data_from_source_to_elasticsearch',retries=2,description="pull data from source write to elasticsearch")
+@flow(name='{flow_name}_pull_data_from_source_to_target',retries=2,description="pull data from source write to elasticsearch")
 def pull_data_from_source_to_target():
     embeddings = OpenAIEmbeddings(openai_api_key='{target_credentials.get('openai_api_key','unknown')}')
 
@@ -276,6 +278,8 @@ def pull_data_from_source_to_target():
         embeddings, 
         es_url="{target_credentials.get('es_url',None)}", 
         index_name="{target_credentials.get('index_name',None)}",
+        es_user="{target_credentials.get('es_user',None)}",
+        es_password="{target_credentials.get('es_password',None)}"
         distance_strategy="COSINE",
         distance_strategy="EUCLIDEAN_DISTANCE",
         distance_strategy="DOT_PRODUCT",
@@ -286,7 +290,7 @@ def pull_data_from_source_to_target():
 
     "Qdrant": {"function_name": "pull_data_from_source_to_target()",
                     "code": f"""
-@flow(name='pull_data_from_source_to_qdrant',retries=2,description="pull data from source write to qdrant")
+@flow(name='{flow_name}_pull_data_from_source_to_target',retries=2,description="pull data from source write to qdrant")
 def pull_data_from_source_to_target():
     embeddings = OpenAIEmbeddings(openai_api_key='{target_credentials.get('openai_api_key','unknown')}')
 
@@ -306,7 +310,7 @@ def pull_data_from_source_to_target():
         
     "Weaviatdb": {"function_name": "pull_data_from_source_to_target()",
                     "code": f"""
-@flow(name='pull_data_from_source_to_weaviatdb',retries=2,description="pull data from source write to weaviatdb")
+@flow(name='{flow_name}_pull_data_from_source_to_target',retries=2,description="pull data from source write to weaviatdb")
 def pull_data_from_source_to_target():
     embeddings = OpenAIEmbeddings(openai_api_key='{target_credentials.get('openai_api_key','unknown')}')
     client = weaviate.Client(url={target_credentials.get('WEAVIATE_URL')}, 
@@ -379,10 +383,10 @@ if __name__ == "__main__":
     storage = S3Bucket.load("s3-connection")
     deployment = Deployment.build_from_flow(
     flow = pull_data_from_source_to_target,   
-    name="traccflows",
+    name=deployment_name,
     work_pool_name ="useflow-pool",
     version="1",
-    tags=["pincone"],
+    tags=[f"{target}"],
     storage=storage,
     entrypoint =f"generate_flow.py:{templated_code[target]['function_name'].split('()')[0]}",
     apply=True,
@@ -534,11 +538,13 @@ def weaviatdb_credentials(openai_api_key=None,weaviate_url=None,weaviate_api_key
 
 
 
-def elasticsearch_credentials(openai_api_key=None,es_url=None,index_name=None):
+def elasticsearch_credentials(openai_api_key=None,es_url=None,index_name=None,es_user=None,es_password=None):
    target_credentials = {
     'openai_api_key':openai_api_key,
     'es_url':es_url,
     'index_name':index_name,
+    "es_user":es_user,
+    "es_password":es_password
     }
    return target_credentials
 
@@ -550,3 +556,296 @@ def singlestoredb_credentials(openai_api_key=None,singlestoredb_url=None,table_n
     'table_name':table_name,
     }
    return target_credentials
+
+
+
+
+
+## prefect cloud api for flows and deployments..............................
+
+## flows
+def get_all_flows(api_key=None,account_id=None,workspace_id=None):
+     
+     PREFECT_API_URL = f"https://api.prefect.cloud/api/accounts/{account_id}/workspaces/{workspace_id}/flows/filter"
+
+     PREFECT_API_KEY=f"{api_key}"
+
+     headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {PREFECT_API_KEY}"
+        }
+    
+     response = requests.post(url=PREFECT_API_URL,headers=headers)
+     if response.status_code == 200:
+        return response.json()
+     else:
+        return None
+     
+def get_flows_by_id(api_key=None,account_id=None,workspace_id=None,flow_id=None):
+     
+     PREFECT_API_URL = f"https://api.prefect.cloud/api/accounts/{account_id}/workspaces/{workspace_id}/flows/{flow_id}"
+
+     PREFECT_API_KEY=f"{api_key}"
+
+     headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {PREFECT_API_KEY}"
+        }
+    
+     response = requests.get(url=PREFECT_API_URL,headers=headers)
+     if response.status_code == 200:
+        return response.json()
+     else:
+        return None
+
+def get_flow_by_name(api_key=None,account_id=None,workspace_id=None,flow_name=None):
+     
+     PREFECT_API_URL = f"https://api.prefect.cloud/api/accounts/{account_id}/workspaces/{workspace_id}/flows/name/{flow_name}"
+
+     PREFECT_API_KEY=f"{api_key}"
+
+     headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {PREFECT_API_KEY}"
+        }
+    
+     response = requests.get(url=PREFECT_API_URL,headers=headers)
+     if response.status_code == 200:
+        return response.json()
+     else:
+        return None
+     
+
+def count_flows(api_key=None,account_id=None,workspace_id=None):
+     
+     PREFECT_API_URL = f"https://api.prefect.cloud/api/accounts/{account_id}/workspaces/{workspace_id}/flows/count"
+
+     PREFECT_API_KEY=f"{api_key}"
+
+     headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {PREFECT_API_KEY}"
+        }
+    
+     response = requests.post(url=PREFECT_API_URL,headers=headers)
+     if response.status_code == 200:
+        return response.json()
+     else:
+        return None
+     
+
+
+     
+
+def delete_flow(api_key=None,account_id=None,workspace_id=None,flow_id=None):
+     
+     PREFECT_API_URL = f"https://api.prefect.cloud/api/accounts/{account_id}/workspaces/{workspace_id}/flows/{flow_id}"
+
+     PREFECT_API_KEY=f"{api_key}"
+
+     headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {PREFECT_API_KEY}"
+        }
+    
+     response = requests.delete(url=PREFECT_API_URL,headers=headers)
+     if response.status_code == 200:
+        return response.json()
+     else:
+        return None
+     
+
+
+## flow runs
+
+def get_flow_run(api_key=None,account_id=None,workspace_id=None,flow_id=None):
+     """
+     Get a flow run by id.
+
+     """
+     
+     PREFECT_API_URL = f"https://api.prefect.cloud/api/accounts/{account_id}/workspaces/{workspace_id}/flow_runs/{flow_id}"
+
+     PREFECT_API_KEY=f"{api_key}"
+
+     headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {PREFECT_API_KEY}"
+        }
+    
+     response = requests.get(url=PREFECT_API_URL,headers=headers)
+     if response.status_code == 200:
+        return response.json()
+     else:
+        return None
+     
+
+def count_flow_runs(api_key=None,account_id=None,workspace_id=None):
+     """
+     Get a flow run by id.
+
+     """
+     
+     PREFECT_API_URL = f"https://api.prefect.cloud/api/accounts/{account_id}/workspaces/{workspace_id}/flow_runs/count"
+
+     PREFECT_API_KEY=f"{api_key}"
+
+     headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {PREFECT_API_KEY}"
+        }
+    
+     response = requests.post(url=PREFECT_API_URL,headers=headers)
+     if response.status_code == 200:
+        return response.json()
+     else:
+        return None
+     
+
+    
+def get_all_flow_runs(api_key=None,account_id=None,workspace_id=None):
+    
+     
+     PREFECT_API_URL = f"https://api.prefect.cloud/api/accounts/{account_id}/workspaces/{workspace_id}/flow_runs/filter"
+
+     PREFECT_API_KEY=f"{api_key}"
+
+     headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {PREFECT_API_KEY}"
+        }
+    
+     response = requests.get(url=PREFECT_API_URL,headers=headers)
+     if response.status_code == 200:
+        return response.json()
+     else:
+        return None
+
+
+     
+
+
+
+## deployments...............
+
+def get_all_deployments(api_key=None,account_id=None,workspace_id=None):
+     
+     PREFECT_API_URL = f"https://api.prefect.cloud/api/accounts/{account_id}/workspaces/{workspace_id}/deployments/filter"
+
+     PREFECT_API_KEY=f"{api_key}"
+     print(PREFECT_API_URL)
+
+     headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {PREFECT_API_KEY}"
+        }
+    
+     response = requests.post(url=PREFECT_API_URL,headers=headers)
+     if response.status_code == 200:
+       return response.json()
+     else:
+       return None
+     
+
+
+def count_deployment(api_key=None,account_id=None,workspace_id=None,flow_name=None,deployment_name=None):
+     PREFECT_API_URL = f"https://api.prefect.cloud/api/accounts/{account_id}/workspaces/{workspace_id}/deployments/count"
+
+     PREFECT_API_KEY=f"{api_key}"
+     print(PREFECT_API_URL)
+
+     headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {PREFECT_API_KEY}"
+        }
+    
+     response = requests.post(url=PREFECT_API_URL,headers=headers)
+     if response.status_code == 200:
+       return response.json()
+     else:
+       return None
+
+def get_deployment_by_name_by_flow_name(api_key=None,account_id=None,workspace_id=None,flow_name=None,deployment_name=None):
+     PREFECT_API_URL = f"https://api.prefect.cloud/api/accounts/{account_id}/workspaces/{workspace_id}/deployments/name/{flow_name}/{deployment_name}"
+
+     PREFECT_API_KEY=f"{api_key}"
+     print(PREFECT_API_URL)
+
+     headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {PREFECT_API_KEY}"
+        }
+    
+     response = requests.get(url=PREFECT_API_URL,headers=headers)
+     if response.status_code == 200:
+       return response.json()
+     else:
+       return None
+     
+
+
+
+def delete_deployment_by_id(api_key=None,account_id=None,workspace_id=None,deployment_id=None):
+     PREFECT_API_URL = f"https://api.prefect.cloud/api/accounts/{account_id}/workspaces/{workspace_id}/deployments/{deployment_id}"
+
+     PREFECT_API_KEY=f"{api_key}"
+     print(PREFECT_API_URL)
+
+     headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {PREFECT_API_KEY}"
+        }
+    
+     response = requests.delete(url=PREFECT_API_URL,headers=headers)
+     if response.status_code == 200:
+       return response.json()
+     else:
+       return None
+     
+
+def schedule_deployment(api_key=None,account_id=None,workspace_id=None,deployment_id=None,start_time=None,end_time=None,min_time=None,min_runs=None,max_runs=None):
+     """
+     Schedule runs for a deployment. For backfills, provide start/end times in the past.
+    This function will generate the minimum number of runs that satisfy the min and max times,
+      and the min and max counts. Specifically, the following order will be respected.
+
+     """
+     PREFECT_API_URL = f"https://api.prefect.cloud/api/accounts/{account_id}/workspaces/{workspace_id}/deployments/{deployment_id}/schedule"
+
+     PREFECT_API_KEY=f"{api_key}"
+     print(PREFECT_API_URL)
+
+     headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {PREFECT_API_KEY}"
+        }
+     data = {
+        "start_time": start_time,
+        "end_time": end_time,
+        "min_time":min_time,
+        "min_runs":min_runs,
+        "max_runs": max_runs
+        }
+    
+     response = requests.post(url=PREFECT_API_URL,headers=headers,data=data)
+     if response.status_code == 200:
+       return response.json()
+     else:
+       raise ValueError
+
+
+
+
+
+
+
+
+flows = get_deployment_by_name_by_flow_name(api_key="pnu_DKi9vzDz5rhUTLcKewQqlB5IQpbKw60WbJzN",
+                 account_id="23ba8a5d-8a6a-444c-955c-51590feae6a6",
+                 workspace_id="0acd3455-c56b-45f8-a74f-8a4fbe8b0c3f",
+                 flow_name="owolabidevelop84@gmail.com_pull_data_from_source_to_target",
+                 deployment_name='traccflows'
+                 )
+
+
+print(flows)

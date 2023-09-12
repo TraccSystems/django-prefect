@@ -12,8 +12,8 @@ from .models import (Pinecone_connection,
                      Github_connection,
                      Qdrant_connection,
                      Elasticsearch_connection,
-                     Notion_connection
-                     
+                     Notion_connection,
+                     OpenAiEmbedding,
                      
                      
                      )
@@ -55,8 +55,16 @@ class GoogleDriveSourceForm(ModelForm):
     class Meta:
         model = GoogleDrive_connection
         fields = ('connection_name',
+                  'gdrive_api_file',
                   'folder_id',
-                  'file_types','recursive')
+                  'file_types',
+                  'recursive',
+                  'template',
+                  'query',
+                  'num_results',
+                  'supportsAllDrives'
+
+                  )
     
      
 
@@ -66,9 +74,10 @@ class GitHubSourceForm(ModelForm):
     class Meta:
         model = Github_connection
         fields = ('connection_name',
-                  'clone_url',
-                  'repo_path',
-                  'branch')
+                  'access_token',
+                  'repo',
+                  'creator',
+                  "include_prs")
         
         
 class SnowFlakeSourceForm(ModelForm):
@@ -116,7 +125,8 @@ class NotionSourceForm(ModelForm):
 class FlowsForm(forms.ModelForm):   
     class Meta:
         model = Flows
-        fields = ("source",'target','schedule_time','time_zone')
+        fields = ("source",'target','schedule_time','time_zone','flow_name','deployment_name',
+                  'source_connection_name','target_connection_name')
 
         widgets = {
             'schedule_time':forms.widgets.DateInput(attrs={'type':'datetime-local'}),
@@ -152,7 +162,7 @@ class SingleStoreDBConnectionsForm(ModelForm):
 class QdrantTargetForm(ModelForm):
     class Meta:
         model = Qdrant_connection
-        fields = ('connection_name','path','collection_name')
+        fields = ('connection_name','url','collection_name','api_key','prefer_grpc')
 
        
 
@@ -177,4 +187,8 @@ class ElasticSearchTargetForm(ModelForm):
                   'es_user',
                   'es_password'
                   )
-       
+
+class OpenAiEmbeddingForm(ModelForm):
+    class Meta:
+        model = OpenAiEmbedding
+        fields = ("openai_api_key",)

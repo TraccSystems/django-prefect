@@ -16,9 +16,11 @@
 
    <!--navbar-->
     <div class="navbar">
-        <li><a href="{% url 'profile' %}">Integrations</a></li>
-        <li><a href="{% url 'flow' %}">Create Flows piplines</a></li>
+        <li><a href="{% url 'integretion' %}">Integrations</a></li>
+        <li><a href="{% url 'connection' %}">Connections</a></li>
+        <li><a href="{% url 'create-pipline' %}">Create piplines</a></li>
         <li><a href="{% url 'flow' %}">Flows piplines</a></li>
+        <li><a href="{% url 'deployment' %}">Deployments</a></li>
        
     </div>
      <!--navbar-->
@@ -39,18 +41,25 @@
 
                     {{ form.connection_name}}
                     <br>
+                    <label for="{{ form.url.id_for_label }}">Url</label>
+                    <br>
+                    {{ form.url }}
 
                     <br>
-                    <label for="{{ form.path.id_for_label }}">Path</label>
+                    <label for="{{ form.prefer_grpc.id_for_label }}">Prefer grpc</label>
                     <br>
-                    {{ form.path }}
-                    <br>
-
+                    {{ form.prefer_grpc }}
+                
+                
                    
                 </div>
 
 
                 <div class="fieldWrapper">
+                    <label for="{{ form.api_key.id_for_label }}">Api key</label>
+                    <br>
+                    {{ form.api_key }}
+                    <br>
 
                     <label for="{{form.collection_name.id_for_label }}">Collection name:</label>
                     <br>

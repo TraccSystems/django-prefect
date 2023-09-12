@@ -123,7 +123,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = "/flows/profile/integration/"
+LOGIN_REDIRECT_URL = "/flows/integration/"
 LOGIN_URL = '/flows/login'
 
 AUTH_USER_MODEL = "flowapp.flowUser"

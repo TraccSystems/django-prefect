@@ -16,9 +16,11 @@
 
    <!--navbar-->
     <div class="navbar">
-        <li><a href="{% url 'profile' %}">Integrations</a></li>
-        <li><a href="{% url 'flow' %}">Create Flows piplines</a></li>
+        <li><a href="{% url 'integretion' %}">Integrations</a></li>
+        <li><a href="{% url 'connection' %}">Connections</a></li>
+        <li><a href="{% url 'create-pipline' %}">Create piplines</a></li>
         <li><a href="{% url 'flow' %}">Flows piplines</a></li>
+        <li><a href="{% url 'deployment' %}">Deployments</a></li>
        
     </div>
      <!--navbar-->
@@ -39,9 +41,14 @@
 
                     {{ form.connection_name}}
                     <br>
-                    <label for="{{ form.clone_url.id_for_label }}">Clone Url</label>
+                    <label for="{{ form.access_token.id_for_label }}">access_token</label>
                     <br>
-                    {{ form.clone_url }}
+                    {{ form.access_token }}
+                    <br>
+
+                    <label for="{{ form.creator.id_for_label }}">creator</label>
+                    <br>
+                    {{ form.creator }}
                     <br>
 
                    
@@ -49,15 +56,15 @@
 
 
                 <div class="fieldWrapper">
+                    <label for="{{ form.creator.id_for_label }}">creator</label>
+                    <br>
+                    {{ form.creator }}
+                    <br>
+                   
 
-                    <label for="{{ form.repo_path.id_for_label }}">Repo path</label>
+                    <label for="{{form.include_prs.id_for_label }}">Include prs:</label>
                     <br>
-                    {{ form.repo_path }}
-                    <br>
-
-                    <label for="{{form.branch.id_for_label }}">Branch:</label>
-                    <br>
-                    {{form.branch }}
+                    {{form.include_prs }}
                     <br>
                 
                 

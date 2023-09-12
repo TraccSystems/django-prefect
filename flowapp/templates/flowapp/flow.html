@@ -16,9 +16,11 @@
 
    <!--navbar-->
     <div class="navbar">
-        <li><a href="{% url 'profile' %}">Integrations</a></li>
-        <li><a href="{% url 'flow' %}">Create Flows piplines</a></li>
+        <li><a href="{% url 'integretion' %}">Integrations</a></li>
+        <li><a href="{% url 'connection' %}">Connections</a></li>
+        <li><a href="{% url 'create-pipline' %}">Create piplines</a></li>
         <li><a href="{% url 'flow' %}">Flows piplines</a></li>
+        <li><a href="{% url 'deployment' %}">Deployments</a></li>
        
     </div>
      <!--navbar-->
@@ -38,10 +40,21 @@
                     <br>
                     {{ form.source }}
                     <br>
-
-                    <label for="{{ form.target.id_for_label }}">Target</label>
                     <br>
-                    {{ form.target }}
+
+                    <label for="{{form.source_connection_name.id_for_label }}">Source connection name:</label>
+                    <br>
+                    {{form.source_connection_name }}
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+
+
+
+                    <label for="{{form.schedule_time.id_for_label }}">Schedule:</label>
+                    <br>
+                    {{form.schedule_time }}
                     <br>
 
                    
@@ -50,9 +63,20 @@
 
                 <div class="fieldWrapper">
 
-                    <label for="{{form.schedule_time.id_for_label }}">Schedule:</label>
+                    
+
+                    <label for="{{ form.target.id_for_label }}">Target</label>
                     <br>
-                    {{form.schedule_time }}
+                    {{ form.target }}
+                    <br>
+                    <br>
+                
+                    <label for="{{form.target_connection_name.id_for_label }}">Target connection name:</label>
+                    <br>
+                    {{form.target_connection_name }}
+                    <br>
+                    <br>
+                    <br>
                     <br>
                 
                     <label for="{{form.time_zone.id_for_label }}">TimeZone:</label>
@@ -62,6 +86,9 @@
                 </div>
 
                 </div>
+
+                <br>
+                <br>
                 <input type="submit" value="Create Flow">
             </form>
 
