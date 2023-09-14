@@ -10,9 +10,11 @@ appdirs==1.4.4
 apprise==1.4.5
 asgi-lifespan==2.1.0
 asgiref==3.7.2
+asn1crypto==1.5.1
 async-timeout==4.0.3
 asyncpg==0.28.0
 attrs==23.1.0
+Authlib==1.2.1
 beautifulsoup4==4.12.2
 boto3==1.28.20
 botocore==1.31.17
@@ -29,6 +31,7 @@ colorama==0.4.6
 coloredlogs==15.0.1
 contourpy==1.1.0
 coolname==2.2.0
+cron-descriptor==1.4.0
 croniter==1.4.1
 cryptography==41.0.3
 cssselect==1.2.0
@@ -53,6 +56,8 @@ fsspec==2023.6.0
 google-auth==2.22.0
 greenlet==2.0.2
 griffe==0.32.3
+grpcio==1.57.0
+grpcio-tools==1.57.0
 h11==0.14.0
 h2==4.1.0
 hpack==4.0.0
@@ -103,6 +108,7 @@ openai==0.27.9
 opencv-python==4.8.0.76
 openpyxl==3.1.2
 orjson==3.9.2
+oscrypto==1.3.0
 packaging==23.1
 pandas==2.0.3
 parse==1.19.1
@@ -113,6 +119,7 @@ pdfplumber==0.10.2
 pendulum==2.1.2
 Pillow==9.5.0
 pinecone-client==2.2.2
+platformdirs==3.8.1
 portalocker==2.7.0
 postgres==4.0
 prefect==2.11.3
@@ -125,10 +132,12 @@ pyasn1==0.5.0
 pyasn1-modules==0.3.0
 pycocotools==2.0.7
 pycparser==2.21
+pycryptodomex==3.18.0
 pydantic==1.10.12
 pyee==8.2.2
 Pygments==2.15.1
 PyJWT==2.8.0
+pyOpenSSL==23.2.0
 pypandoc==1.11
 pyparsing==3.0.9
 pypdfium2==4.18.0
@@ -147,6 +156,7 @@ pytz==2023.3
 pytzdata==2020.1
 pywin32==306
 PyYAML==6.0.1
+qdrant-client==1.5.0
 readchar==4.0.5
 referencing==0.30.2
 regex==2023.6.3
@@ -165,6 +175,8 @@ scipy==1.11.2
 singlestoredb==0.8.3
 six==1.16.0
 sniffio==1.3.0
+snowflake-connector-python==3.1.1
+sortedcontainers==2.4.0
 soupsieve==2.4.1
 SQLAlchemy==2.0.19
 sqlparams==5.1.0
@@ -179,6 +191,7 @@ tiktoken==0.4.0
 timm==0.9.5
 tokenizers==0.13.3
 toml==0.10.2
+tomlkit==0.12.1
 torch==2.0.1
 torchvision==0.15.2
 tqdm==4.65.0
@@ -192,7 +205,9 @@ unstructured==0.10.6
 unstructured-inference==0.5.17
 urllib3==1.26.16
 uvicorn==0.23.2
+validators==0.21.0
 w3lib==2.1.2
+weaviate-client==3.23.2
 websocket-client==1.6.1
 websockets==10.4
 win32-setctime==1.1.0

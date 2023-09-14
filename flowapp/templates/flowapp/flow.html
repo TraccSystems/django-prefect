@@ -20,6 +20,7 @@
         <li><a href="{% url 'connection' %}">Connections</a></li>
         <li><a href="{% url 'create-pipline' %}">Create piplines</a></li>
         <li><a href="{% url 'flow' %}">Flows piplines</a></li>
+        <li><a href="{% url 'flow-runs' %}">Flow Runs</a></li>
         <li><a href="{% url 'deployment' %}">Deployments</a></li>
        
     </div>
@@ -29,7 +30,7 @@
     <div class="page-content">
         <div class="flow-forms-container">
 
-            <form action="{% url 'flow' %}" method="post">
+            <form action="{% url 'create-pipline' %}" method="post">
                 {% csrf_token %}
             <div class="connection_forms">
                 {{form.non_field_errors }}
@@ -39,6 +40,13 @@
                     <label for="{{ s3form.source.id_for_label }}">Source</label>
                     <br>
                     {{ form.source }}
+                    <br>
+                    <br>
+
+                    
+                    <label for="{{ form.deployment_name.id_for_label }}">Deployment Name</label>
+                    <br>
+                    {{ form.deployment_name }}
                     <br>
                     <br>
 
@@ -68,6 +76,13 @@
                     <label for="{{ form.target.id_for_label }}">Target</label>
                     <br>
                     {{ form.target }}
+                    <br>
+                    <br>
+
+                    
+                    <label for="{{ form.flow_name.id_for_label }}">Flow Name</label>
+                    <br>
+                    {{ form.flow_name }}
                     <br>
                     <br>
                 

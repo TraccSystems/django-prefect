@@ -47,7 +47,7 @@ documents = load_external_document(
     prefix='articles/owolabi_accessKeys.csv')
             
 
-@flow(name='owolabidevelop84@gmail.com_pull_data_from_source_to_target',retries=2,description="pull data from source write to pincone")
+@flow(name='owolabi_pull_data_from_S3_to_Pinecone',retries=2,description="pull data from source write to pincone")
 def pull_data_from_source_to_target():
     
     embeddings = OpenAIEmbeddings(openai_api_key="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")

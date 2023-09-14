@@ -29,45 +29,22 @@
 
     <!--page-content-->
     <div class="page-content">
-
-    <div class="connection_container">
-        <table>
-            <tr>
-                <th>Id</th>
-                <th>Flow Name</th>
-                <th>Tags</th>
-                <th>Created</th>
-                <th></th>
-            </tr>
-
-        
-         
-        {% if flows %}
-        {% for flow in flows %}
-        
+    {% if flow_runs %}
+    {% for flow_run in flow_runs  %}
+    
+    
+    <div class="flow-run-container">
+        <p>{{flow.name}}  &nbsp; >  &nbsp; {{flow_run.name}} <span class="inner-span">{{flow_run.tags|first}}</span></p>
        
-            <tr>
-                <td>{{flow.id}}</td>
-                <td>{{flow.name}}</td>
-                <td>{{deployment.tags|first}}</td>
-                <td>{{flow.created|convert_date}}</td>
-                <td><a href="{% url "delete-flow" flow.id %}">X</a></td>
-               
-                
-            </tr>
-            {% endfor %}
+        <p><span class="inner-span">{{flow_run.state.type}}</span> &nbsp; &nbsp; {{flow_run.start_time|convert_date}}  &nbsp; &nbsp; next schedule time: {{flow_run.next_scheduled_start_time}}</p>
 
-            {% else %}
-            <p> No flow created yet</p>
-           
-            {% endif %}
-          
-           
-            
-
-        </table>
-
+        <p> Deployment {{deployment.name}}  &nbsp; &nbsp; Work Pool:{{flow_run.work_pool_name}} &nbsp; &nbsp; Work Queue:{{flow_run.work_queue_name}}</p>
+       
     </div>
+    {% endfor %}
+    {% else %}
+    <p>No Flow Run yet</p>
+    {% endif %}
 
       
    

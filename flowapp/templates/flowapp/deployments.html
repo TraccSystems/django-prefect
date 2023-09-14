@@ -1,4 +1,6 @@
 {% load static %}
+{% load tz %}
+{% load cron_tag %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,12 +22,57 @@
         <li><a href="{% url 'connection' %}">Connections</a></li>
         <li><a href="{% url 'create-pipline' %}">Create piplines</a></li>
         <li><a href="{% url 'flow' %}">Flows piplines</a></li>
+        <li><a href="{% url 'flow-runs' %}">Flow Runs</a></li>
         <li><a href="{% url 'deployment' %}">Deployments</a></li>
     </div>
      <!--navbar-->
 
     <!--page-content-->
     <div class="page-content">
+
+    <div class="connection_container">
+        <table>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Schedule</th>
+                <th>Tags</th>
+                <th>Applied By</th>
+                <th>Created</th>
+                <th>Run</th>
+                <th></th>
+            </tr>
+
+        
+         
+        {% if deployments %}
+        {% for deployment in  deployments %}
+        
+       
+            <tr>
+                <td>{{deployment.id}}</td>
+                <td>{{deployment.name}}</td>
+                <td>{{deployment.schedule.cron|convert_cron_to_readable_fromat}}</td>
+                <td>{{deployment.tags|first}}</td>
+                <td>{{deployment.created_by.display_value}}</td>
+                <td>{{deployment.created|convert_date}}</td>
+                <td><a href="{% url "run-deployment" deployment.id %}"><button>Run</button></a></td>
+                <td><a href="{% url "delete-deployment" deployment.id %}">X</a></td>
+               
+                
+            </tr>
+            {% endfor %}
+            {% else %}
+            <p> No deployment created yet</p>
+            {% endif %}
+           
+           
+            
+
+        </table>
+
+    </div>
+
       
    
 

@@ -80,7 +80,7 @@ class UserProfile(models.Model):
 
 ### source connection
 class S3_connections_digital_ocean(models.Model):
-    connection_name = models.CharField(max_length=255)
+    connection_name = models.CharField(max_length=255,unique=True)
     aws_access_key_id = models.CharField(max_length=200,unique=True)
     aws_region = models.CharField(max_length=200)
     aws_endpoint_url  = models.CharField(max_length=200)
@@ -100,7 +100,7 @@ class S3_connections_digital_ocean(models.Model):
 
 
 class S3_connections_aws(models.Model):
-    connection_name = models.CharField(max_length=255)
+    connection_name = models.CharField(max_length=255,unique=True)
     aws_access_key_id = models.CharField(max_length=200,unique=True)
     key = models.CharField(max_length=200)
     aws_secret_access_key  = models.CharField(max_length=200)
@@ -118,7 +118,7 @@ class S3_connections_aws(models.Model):
 
 
 class Postgress_connections(models.Model):
-    connection_name = models.CharField(max_length=255)
+    connection_name = models.CharField(max_length=255,unique=True)
     database_name = models.CharField(max_length=20,unique=True)
     host = models.CharField(max_length=30)
     password = models.CharField(max_length=16,unique=True)
@@ -126,6 +126,7 @@ class Postgress_connections(models.Model):
     username = models.CharField(max_length=20,unique=True)
     source_name = models.CharField(max_length=255,default='Postgress')
     owner = models.ForeignKey(UserProfile,on_delete=models.CASCADE)
+    created_at = models.DateField(auto_now=True)
     created_at = models.DateField(auto_now=True)
 
 
@@ -139,7 +140,7 @@ class Postgress_connections(models.Model):
 
 
 class GoogleDrive_connection(models.Model):
-    connection_name = models.CharField(max_length=255)
+    connection_name = models.CharField(max_length=255,unique=True)
     source_name = models.CharField(max_length=255,default='Googledrive')
     folder_id= models.CharField(max_length=255)
     gdrive_api_file = models.CharField(max_length=255)
@@ -148,7 +149,7 @@ class GoogleDrive_connection(models.Model):
     query = models.CharField(max_length=255)
     num_results = models.CharField(max_length=255,default=2)
     supportsAllDrives = models.BooleanField(default=False)
-
+    created_at = models.DateField(auto_now=True)
     recursive = models.BooleanField(default=False)
     owner = models.ForeignKey(UserProfile,on_delete=models.CASCADE)
     
@@ -157,13 +158,14 @@ class GoogleDrive_connection(models.Model):
          return self.source_name
 
 class Github_connection(models.Model):
-    connection_name = models.CharField(max_length=255)
+    connection_name = models.CharField(max_length=255,unique=True)
     source_name = models.CharField(max_length=255,default='Github')
     access_token = models.CharField(max_length=255)
     repo= models.CharField(max_length=255)
     creator = models.CharField(max_length=255)
     include_prs = models.BooleanField(default=False)
     owner = models.ForeignKey(UserProfile,on_delete=models.CASCADE)
+    created_at = models.DateField(auto_now=True)
 
 
     def __str__(self) -> str:
@@ -172,7 +174,7 @@ class Github_connection(models.Model):
 
 
 class Snowflake_connection(models.Model):
-      connection_name = models.CharField(max_length=255)
+      connection_name = models.CharField(max_length=255,unique=True)
       source_name = models.CharField(max_length=255,default='Snowflake')
       query = models.TextField()
       user = models.CharField(max_length=255)
@@ -183,6 +185,7 @@ class Snowflake_connection(models.Model):
       database = models.CharField(max_length=255)
       schema= models.CharField(max_length=255)
       owner = models.ForeignKey(UserProfile,on_delete=models.CASCADE)
+      created_at = models.DateField(auto_now=True)
 
       def __str__(self) -> str:
          return self.source_name
@@ -190,23 +193,25 @@ class Snowflake_connection(models.Model):
 
 
 class AzureblobStorage_connection(models.Model):
-     connection_name = models.CharField(max_length=255)
+     connection_name = models.CharField(max_length=255,unique=True)
      source_name = models.CharField(max_length=255,default='AzureblobStorage')
      conn_str = models.CharField(max_length=255)
      container= models.CharField(max_length=255)
      blob_name= models.CharField(max_length=255)
      owner = models.ForeignKey(UserProfile,on_delete=models.CASCADE)
+     created_at = models.DateField(auto_now=True)
 
      def __str__(self) -> str:
          return self.source_name
      
 
 class AzureblobContainer_connection(models.Model):
-     connection_name = models.CharField(max_length=255)
+     connection_name = models.CharField(max_length=255,unique=True)
      source_name = models.CharField(max_length=255,default='AzureblobContainer')
      conn_str = models.CharField(max_length=255)
      container= models.CharField(max_length=255)
      owner = models.ForeignKey(UserProfile,on_delete=models.CASCADE)
+     created_at = models.DateField(auto_now=True)
 
      def __str__(self) -> str:
          return self.source_name
@@ -214,12 +219,13 @@ class AzureblobContainer_connection(models.Model):
 
 
 class Notion_connection(models.Model):
-     connection_name = models.CharField(max_length=255)
+     connection_name = models.CharField(max_length=255,unique=True)
      source_name = models.CharField(max_length=255,default='Notion')
      integration_token = models.CharField(max_length=255)
      database_id = models.CharField(max_length=255)
      request_timeout_sec = models.CharField(max_length=10)
      owner = models.ForeignKey(UserProfile,on_delete=models.CASCADE)
+     created_at = models.DateField(auto_now=True)
  
      def __str__(self) -> str:
          return self.source_name
@@ -235,7 +241,7 @@ class Notion_connection(models.Model):
 ## traget connection
 
 class Pinecone_connection(models.Model):
-    connection_name = models.CharField(max_length=255)
+    connection_name = models.CharField(max_length=255,unique=True)
     api_key = models.CharField(max_length=255,unique=True)
     environment = models.CharField(max_length=255)
     index_name = models.CharField(max_length=255)
@@ -252,7 +258,7 @@ class Pinecone_connection(models.Model):
 
 
 class SingleStoreDB_connections(models.Model):
-    connection_name = models.CharField(max_length=255)
+    connection_name = models.CharField(max_length=255,unique=True)
     target_name = models.CharField(max_length=255,default='SingleStoreDB')
     table_name = models.CharField(max_length=255,default='scrap_data')
     created_at = models.DateField(auto_now=True)
@@ -268,7 +274,7 @@ class SingleStoreDB_connections(models.Model):
 
 
 class Qdrant_connection(models.Model):
-      connection_name = models.CharField(max_length=255)
+      connection_name = models.CharField(max_length=255,unique=True)
       target_name = models.CharField(max_length=255,default='Qdrant')
       url = models.CharField(max_length=255)
       api_key = models.CharField(max_length=255,default=None)
@@ -283,7 +289,7 @@ class Qdrant_connection(models.Model):
 
 
 class Weaviatdb_connection(models.Model):
-      connection_name = models.CharField(max_length=255)
+      connection_name = models.CharField(max_length=255,unique=True)
       target_name = models.CharField(max_length=255,default='Weaviatdb')
       url = models.CharField(max_length=255)
       api_key = models.CharField(max_length=255)
@@ -296,7 +302,7 @@ class Weaviatdb_connection(models.Model):
 
 
 class Elasticsearch_connection(models.Model):
-      connection_name = models.CharField(max_length=255)
+      connection_name = models.CharField(max_length=255,unique=True)
       target_name = models.CharField(max_length=255,default='Elasticsearch')
       es_url =  models.CharField(max_length=255)
       index_name = models.CharField(max_length=255)

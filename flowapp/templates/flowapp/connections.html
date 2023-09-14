@@ -20,12 +20,258 @@
         <li><a href="{% url 'connection' %}">Connections</a></li>
         <li><a href="{% url 'create-pipline' %}">Create piplines</a></li>
         <li><a href="{% url 'flow' %}">Flows piplines</a></li>
+        <li><a href="{% url 'flow-runs' %}">Flow Runs</a></li>
         <li><a href="{% url 'deployment' %}">Deployments</a></li>
     </div>
      <!--navbar-->
 
     <!--page-content-->
     <div class="page-content">
+
+    <div class="connection_container">
+        <table>
+            <tr>
+                <th>Source/target</th>
+                <th>Connection name</th>
+                <th>Connection type</th>
+                <th>Owner</th>
+                <th>Created</th>
+                <th></th>
+            </tr>
+
+            <!--s3-->
+         {% if s3 %}
+         {% for connections in s3  %}
+         
+        
+            <tr>
+                <td>{{connections.source_name}}</td>
+                <td>{{connections.connection_name}}</td>
+                <td>Source</td>
+                <td>{{connections.owner}}</td>
+                <td>{{connections.created_at}}</td>
+                <td>x</td>
+                
+            </tr>
+            {% endfor %}
+
+            {% endif %}
+
+
+            <!--googledrive-->
+            {% if googledrive %}
+         {% for connections in googledrive  %}
+         
+        
+            <tr>
+                <td>{{connections.source_name}}</td>
+                <td>{{connections.connection_name}}</td>
+                <td>Source</td>
+                <td>{{connections.owner}}</td>
+                <td>{{connections.created_at}}</td>
+                <td>x</td>
+                
+            </tr>
+            {% endfor %}
+
+            {% endif %}
+
+
+              <!--github-->
+              {% if github %}
+              {% for connections in github  %}
+              
+             
+                 <tr>
+                     <td>{{connections.source_name}}</td>
+                     <td>{{connections.connection_name}}</td>
+                     <td>Source</td>
+                     <td>{{connections.owner}}</td>
+                     <td>{{connections.created_at}}</td>
+                     <td>x</td>
+                     
+                 </tr>
+                 {% endfor %}
+     
+                 {% endif %}
+
+
+                   <!--snowflake-->
+              {% if snowflake %}
+              {% for connections in snowflake  %}
+              
+             
+                 <tr>
+                     <td>{{connections.source_name}}</td>
+                     <td>{{connections.connection_name}}</td>
+                     <td>Source</td>
+                     <td>{{connections.owner}}</td>
+                     <td>{{connections.created_at}}</td>
+                     <td>x</td>
+                     
+                 </tr>
+                 {% endfor %}
+     
+                 {% endif %}
+
+
+                 
+                   <!--azurestorage-->
+              {% if azurestorage %}
+              {% for connections in azurestorage  %}
+              
+             
+                 <tr>
+                     <td>{{connections.source_name}}</td>
+                     <td>{{connections.connection_name}}</td>
+                     <td>Source</td>
+                     <td>{{connections.owner}}</td>
+                     <td>{{connections.created_at}}</td>
+                     <td>x</td>
+                     
+                 </tr>
+                 {% endfor %}
+     
+                 {% endif %}
+
+               
+                   <!--azurecontainer-->
+                   {% if azurecontainer %}
+                   {% for connections in azurecontainer  %}
+                   
+                  
+                      <tr>
+                          <td>{{connections.source_name}}</td>
+                          <td>{{connections.connection_name}}</td>
+                          <td>Source</td>
+                          <td>{{connections.owner}}</td>
+                          <td>{{connections.created_at}}</td>
+                          <td>x</td>
+                          
+                      </tr>
+                      {% endfor %}
+          
+                      {% endif %}
+
+                    
+                        <!--notion-->
+                   {% if notion %}
+                   {% for connections in notion  %}
+                   
+                  
+                      <tr>
+                          <td>{{connections.source_name}}</td>
+                          <td>{{connections.connection_name}}</td>
+                          <td>Source</td>
+                          <td>{{connections.owner}}</td>
+                          <td>{{connections.created_at}}</td>
+                          <td>x</td>
+                          
+                      </tr>
+                      {% endfor %}
+          
+                      {% endif %}
+
+
+                      
+                    
+                        <!--pinecone-->
+                   {% if pinecone %}
+                   {% for connections in pinecone  %}
+                   
+                  
+                      <tr>
+                          <td>{{connections.target_name}}</td>
+                          <td>{{connections.connection_name}}</td>
+                          <td>Target</td>
+                          <td>{{connections.owner}}</td>
+                          <td>{{connections.created_at}}</td>
+                          <td>x</td>
+                          
+                      </tr>
+                      {% endfor %}
+          
+                      {% endif %}
+
+                            <!--weaviate-->
+                   {% if weaviate %}
+                   {% for connections in weaviate  %}
+                   
+                  
+                      <tr>
+                          <td>{{connections.target_name}}</td>
+                          <td>{{connections.connection_name}}</td>
+                          <td>Target</td>
+                          <td>{{connections.owner}}</td>
+                          <td>{{connections.created_at}}</td>
+                          <td>x</td>
+                          
+                      </tr>
+                      {% endfor %}
+          
+                      {% endif %}
+
+                                <!--singlestore-->
+                   {% if singlestore %}
+                   {% for connections in singlestore  %}
+                   
+                  
+                      <tr>
+                          <td>{{connections.target_name}}</td>
+                          <td>{{connections.connection_name}}</td>
+                          <td>Target</td>
+                          <td>{{connections.owner}}</td>
+                          <td>{{connections.created_at}}</td>
+                          <td>x</td>
+                          
+                      </tr>
+                      {% endfor %}
+          
+                      {% endif %}
+
+
+                                     <!--qdrant-->
+                   {% if qdrant %}
+                   {% for connections in qdrant  %}
+                   
+                  
+                      <tr>
+                          <td>{{connections.target_name}}</td>
+                          <td>{{connections.connection_name}}</td>
+                          <td>Target</td>
+                          <td>{{connections.owner}}</td>
+                          <td>{{connections.created_at}}</td>
+                          <td>x</td>
+                          
+                      </tr>
+                      {% endfor %}
+          
+                      {% endif %}
+
+
+                                         <!--elasticsearch-->
+                   {% if elasticsearch %}
+                   {% for connections in elasticsearch  %}
+                   
+                  
+                      <tr>
+                          <td>{{connections.target_name}}</td>
+                          <td>{{connections.connection_name}}</td>
+                          <td>Target</td>
+                          <td>{{connections.owner}}</td>
+                          <td>{{connections.created_at}}</td>
+                          <td>x</td>
+                          
+                      </tr>
+                      {% endfor %}
+          
+                      {% endif %}
+            
+
+        </table>
+
+    </div>
+
       
    
 

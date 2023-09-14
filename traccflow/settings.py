@@ -127,3 +127,5 @@ LOGIN_REDIRECT_URL = "/flows/integration/"
 LOGIN_URL = '/flows/login'
 
 AUTH_USER_MODEL = "flowapp.flowUser"
+
+USE_TZ = True
